@@ -10,6 +10,7 @@ namespace Toolkits\LaravelBuilder;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Toolkits\LaravelBuilder\Console\MakeCommand;
 
 class LaravelBuilderServiceProvider extends ServiceProvider
 {
@@ -26,9 +27,15 @@ class LaravelBuilderServiceProvider extends ServiceProvider
         define('_TLB_PKG_NAME_', $this->package_name);
         require __DIR__ . '/helpers.php';
 
-        $this->loadMigrationsFrom(__DIR__.'/../migrations');
+//        $this->loadMigrationsFrom(__DIR__.'/../migrations');
         $this->loadTranslationsFrom(__DIR__.'/../lang', $this->package_name);
         $this->builderRoutes();
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                MakeCommand::class,
+            ]);
+        }
     }
 
     protected function builderRoutes()
