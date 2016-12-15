@@ -13,4 +13,14 @@ use Illuminate\Console\Command;
 class MakeCommand extends Command
 {
 
+    protected $signature = 'make:project {name}';
+
+    protected $description = 'Creates a project within Laravel App';
+
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'builder';
 }
