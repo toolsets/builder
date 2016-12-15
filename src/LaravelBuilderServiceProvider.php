@@ -8,8 +8,9 @@
 
 namespace Toolkits\LaravelBuilder;
 
+use Illuminate\Support\ServiceProvider;
 
-class ServiceProvider
+class LaravelBuilderServiceProvider extends ServiceProvider
 {
 
 }
