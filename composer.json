@@ -12,7 +12,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Toolkits\\LaravelBuilder\\": "src/"
+            "Toolkits\\LaravelBuilder\\": "lib/"
         }
     },
     "autoload-dev": {
