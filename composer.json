@@ -1,0 +1,28 @@
+{
+    "name": "toolkits/laravel-builder",
+    "description": "Application builder for Laravel",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["Builder", "laravel"],
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Raf",
+            "email": "raftalks@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Toolkits\\LaravelBuilder\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/TestCase.php"
+        ]
+    },
+    "require": {
+        "php": ">=5.6.4"
+    },
+    "minimum-stability": "stable"
+}
