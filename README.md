@@ -1,4 +1,6 @@
 ## Laravel Builder
+[![Build Status](https://travis-ci.org/toolsets/laravel-builder.svg?branch=master)](https://travis-ci.org/toolsets/laravel-builder)
+
 
 ### A fluent application builder for Laravel 5.3
 
