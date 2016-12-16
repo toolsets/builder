@@ -7,7 +7,7 @@
 
     <title>Laravel Builder</title>
 
-    <script type="text/javascript" src="/vendor/tlb/js/builder.js" />
+
 
     @stack('styles')
 
@@ -17,11 +17,15 @@
         ]); ?>
     </script>
 
+
+
 </head>
 </html>
 <body>
     <h2>Builder</h2>
-    <div id="app"></div>
-
+    <div id="app">
+        <builder ></builder>
+    </div>
+    <script src="/vendor/tlb/js/app.js"></script>
     @stack('scripts')
 </body>
