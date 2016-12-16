@@ -28,7 +28,7 @@ class LaravelBuilderServiceProvider extends ServiceProvider
         require __DIR__ . '/helpers.php';
 
 //        $this->loadMigrationsFrom(__DIR__.'/../migrations');
-        $this->loadTranslationsFrom(__DIR__.'/../lang', $this->package_name);
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', $this->package_name);
         $this->builderRoutes();
 
         if ($this->app->runningInConsole()) {
@@ -36,6 +36,12 @@ class LaravelBuilderServiceProvider extends ServiceProvider
                 MakeCommand::class,
             ]);
         }
+
+        $this->publishes([
+            __DIR__.'/../build' => public_path('vendor/' . $this->package_name),
+        ], 'public');
+
+        $this->loadViewsFrom(__DIR__.'/../resources/views', $this->package_name);
     }
 
     protected function builderRoutes()
