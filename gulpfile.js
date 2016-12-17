@@ -17,5 +17,6 @@ elixir.config.publicPath = 'build';
 
 elixir((mix) => {
     mix.sass('app.scss')
-       .webpack('app.js');
+       .webpack('app.js')
+    .copy('build', '../../../public/vendor/tlb');
 });

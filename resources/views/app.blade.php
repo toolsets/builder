@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Laravel Builder</title>
-
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/vendor/tlb/css/app.css">
 
 
     @stack('styles')
@@ -22,9 +23,67 @@
 </head>
 </html>
 <body>
-    <h2>Builder</h2>
     <div id="app">
-        <builder ></builder>
+        <header class="main-header">
+            <main-nav></main-nav>
+        </header>
+
+        <aside class="main-sidebar">
+            <ul class="icon-menu">
+                <li>
+                    <a href="#">
+                        <i class="fa fa-database" aria-hidden="true"></i>
+                        <div>
+                            <small>Database</small>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-connectdevelop" aria-hidden="true"></i>
+                        <div>
+                            <small>Models</small>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-wpforms" aria-hidden="true"></i>
+                        <div>
+                            <small>Forms</small>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
+                        <div>
+                            <small>Modules</small>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                        <div>
+                            <small>Permissions</small>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-globe" aria-hidden="true"></i>
+                        <div>
+                            <small>Localization</small>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <div class="content-wrapper">
+            <builder ></builder>
+        </div>
     </div>
     <script src="/vendor/tlb/js/app.js"></script>
     @stack('scripts')

@@ -1,0 +1,78 @@
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+$sidebar-background: #303030;
+
+.main-header {
+  position: fixed;
+  top:0;
+  right:0;
+  left: 0;
+  max-height: 100px;
+  z-index: 1050;
+}
+
+.content-wrapper {
+  padding-top: 50px;
+  transition: transform .3s ease-in-out,margin .3s ease-in-out;
+  margin-left: 130px;
+}
+
+
+.main-sidebar {
+
+  background-color: $sidebar-background;
+  position: fixed;
+  top:0;
+  left:0;
+  padding-top: 50px;
+  min-height:100%;
+  width: 130px;
+  z-index: 800;
+  transition: transform .3s ease-in-out,width .3s ease-in-out;
+  color: #dfdfdf;
+
+  ul {
+
+    list-style-type: none !important;
+
+    &.icon-menu {
+      margin:0px;
+      padding: 15px;
+      padding-left: 0px;
+      padding-right: 0px;
+
+      li {
+
+        a {
+          width:100%;
+
+          background-color: #303030;
+          //border:1px solid #232323;
+          padding:8px;
+          display: block;
+          text-decoration: none;
+          transition: background-color 0.2s ease-in-out;
+          color: #dfdfdf;
+          text-align: center;
+          vertical-align: middle;
+
+          i.fa {
+            font-size: 2em;
+          }
+
+          &:hover {
+            background-color: #1f1f1f;
+            transition: background-color 0.4s ease-in;
+            //border-color: #2b2b2b;
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+  }
+}
