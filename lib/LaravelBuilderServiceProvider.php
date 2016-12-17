@@ -39,7 +39,10 @@ class LaravelBuilderServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../build' => public_path('vendor/' . $this->package_name),
+            __DIR__.'/../resources/assets/fonts' => public_path('vendor/' . $this->package_name . '/fonts')
         ], 'public');
+
+
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', $this->package_name);
     }

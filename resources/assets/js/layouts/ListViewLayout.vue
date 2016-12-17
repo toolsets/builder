@@ -33,6 +33,14 @@
         bottom:0;
         background-color: #cdcdcd;
     }
+
+    .list-view-panel {
+        position: absolute;
+        top:0;
+        left:350px;
+        right:0;
+        bottom:0;
+    }
 }
 
 </style>
