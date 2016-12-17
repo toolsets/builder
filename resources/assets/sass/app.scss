@@ -6,6 +6,11 @@
 
 $sidebar-background: #303030;
 
+html, body, #app {
+  height: 100%;
+  position:relative;
+}
+
 .main-header {
   position: fixed;
   top:0;
@@ -18,7 +23,12 @@ $sidebar-background: #303030;
 .content-wrapper {
   padding-top: 50px;
   transition: transform .3s ease-in-out,margin .3s ease-in-out;
-  margin-left: 130px;
+  position: fixed;
+  top:0;
+  bottom:0;
+  left:130px;
+  right:0;
+
 }
 
 

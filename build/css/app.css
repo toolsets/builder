@@ -7687,6 +7687,11 @@ button.close {
   }
 }
 
+html, body, #app {
+  height: 100%;
+  position: relative;
+}
+
 .main-header {
   position: fixed;
   top: 0;
@@ -7702,7 +7707,11 @@ button.close {
   transition: margin .3s ease-in-out,-webkit-transform .3s ease-in-out;
   transition: transform .3s ease-in-out,margin .3s ease-in-out;
   transition: transform .3s ease-in-out,margin .3s ease-in-out,-webkit-transform .3s ease-in-out;
-  margin-left: 130px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 130px;
+  right: 0;
 }
 
 .main-sidebar {

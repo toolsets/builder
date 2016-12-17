@@ -31,58 +31,58 @@
         <aside class="main-sidebar">
             <ul class="icon-menu">
                 <li>
-                    <a href="#">
+                    <router-link to="/database">
                         <i class="fa fa-database" aria-hidden="true"></i>
                         <div>
                             <small>Database</small>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li>
-                    <a href="#">
+                    <router-link to="/models">
                         <i class="fa fa-connectdevelop" aria-hidden="true"></i>
                         <div>
                             <small>Models</small>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li>
-                    <a href="#">
+                    <router-link to="/forms">
                         <i class="fa fa-wpforms" aria-hidden="true"></i>
                         <div>
                             <small>Forms</small>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li>
-                    <a href="#">
+                    <router-link to="/modules">
                         <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
                         <div>
                             <small>Modules</small>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li>
-                    <a href="#">
+                    <router-link to="/permissions">
                         <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                         <div>
                             <small>Permissions</small>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
                 <li>
-                    <a href="#">
+                    <router-link to="/localization">
                         <i class="fa fa-globe" aria-hidden="true"></i>
                         <div>
                             <small>Localization</small>
                         </div>
-                    </a>
+                    </router-link>
                 </li>
             </ul>
         </aside>
 
         <div class="content-wrapper">
-            <builder ></builder>
+            <router-view></router-view>
         </div>
     </div>
     <script src="/vendor/tlb/js/app.js"></script>
