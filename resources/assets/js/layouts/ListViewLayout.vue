@@ -1,18 +1,29 @@
 <template>
     <div class="list-view-layout">
         <div class="list-panel">
-            <slot name="list">
-                List of items in here
-            </slot>
+            <router-view  name="list">
         </div>
 
         <div class="list-view-panel">
-            <slot name="view">
-                List view here
-            </slot>
+            <router-view  name="form"></router-view>
         </div>
     </div>
 </template>
+
+<script>
+
+export default {
+    data() {
+        return {
+            transitionName: 'slide-left'
+        }
+    },
+
+    methods() {
+
+    }
+}
+</script>
 
 <style lang="sass" scoped>
 .list-view-layout {

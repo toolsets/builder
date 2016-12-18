@@ -4,6 +4,11 @@
 @import "variables";
 
 // Bootstrap
+$border-radius-base: 0;
+$brand-primary: #1b6d85;
+$component-active-bg: #95C4D1;
+$component-active-color: #000000;
+$list-group-active-border:#1b6d85;
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 @import "./font-awesome/font-awesome";
@@ -32,6 +37,12 @@ html, body, #app {
   bottom:0;
   left:130px;
   right:0;
+  height:inherit;
+
+  .wrapper {
+    position: relative;
+    height: inherit;
+  }
 
 }
 
@@ -92,7 +103,7 @@ html, body, #app {
 }
 
 
-.panel-header {
+.title-header {
   padding: 8px;
   background-color: #f5f5f5;
   line-height: 1em;

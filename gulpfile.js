@@ -15,6 +15,20 @@ require('laravel-elixir-vue-2');
 
 elixir.config.publicPath = 'build';
 
+
+const webpackConfig = {
+    output: {
+        publicPath : '/vendor/tlb/js/'
+    }
+};
+
+elixir.ready(function(){
+
+    elixir.webpack.mergeConfig(webpackConfig);
+
+});
+
+
 elixir((mix) => {
     mix.sass('app.scss')
        .webpack('app.js')

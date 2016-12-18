@@ -1,38 +1,37 @@
 //load application bootstrap file
+
 require('./bootstrap')
 
-
-
 Vue.component('main-nav', require('./components/MainNav.vue'));
-Vue.component('list-view-layout', require('./layouts/ListViewLayout.vue'));
 
+import createRoutes from './routes/index';
 
-import DatabaseComponent from './components/Database/Database.vue';
+const routes = [];
+routes.push(createRoutes())
 
-const ModelsComponent = { template: '<div>Models</div>' }
+const router = new VueRouter({routes})
 
+const bus = new Vue();
 
-const routes = [
+const globalMixinMethods = {
+    fireOnBus: function(key, args = null)
     {
-        path: '/database/:tablename?', component: DatabaseComponent
+        console.log('fire on bus fired', key, args);
+        bus.$emit(key, args);
     },
+
+    listenOnBus: function(key, callback)
     {
-        path: '/models/:modelname?', component: ModelsComponent
+        console.log('listen on bus for '+ key);
+        bus.$on(key, callback);
     }
-]
+}
 
-
-const router = new VueRouter({
-    routes
-})
-
-
-const app = new Vue({
-    router,
-    el: '#app',
-    data: {
-        message: 'Hello Vue!'
-    }
+Vue.mixin({
+    methods: globalMixinMethods
 });
 
-console.log('app loaded');
+const app = new Vue({
+    router
+}).$mount('#app');
+
