@@ -29,6 +29,8 @@
         "Illuminate/Console": "^5.3",
         "illuminate/support": "^5.3",
         "illuminate/routing": "^5.3",
-        "illuminate/container": "^5.3"
+        "illuminate/container": "^5.3",
+        "symfony/yaml": "^3.2",
+        "Illuminate/Database": "^5.3"
     }
 }
