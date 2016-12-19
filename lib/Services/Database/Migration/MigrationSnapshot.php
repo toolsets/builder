@@ -12,7 +12,8 @@ namespace Toolkits\LaravelBuilder\Services\Database\Migration;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Yaml\Yaml;
+use Toolkits\LaravelBuilder\Parsers\Yaml;
+
 
 class MigrationSnapshot
 {
@@ -50,10 +51,10 @@ class MigrationSnapshot
         }
 
         if (!isset($this->data[$connectionName][$databaseName][$table])) {
-            $this->data[$connectionName][$databaseName][$table] = [];
+            $this->data[$connectionName][$databaseName][$table] = ['columns' => []];
         }
 
-        $existingColumns = $this->data[$connectionName][$databaseName][$table];
+        $existingColumns = $this->data[$connectionName][$databaseName][$table]['columns'];
 
         if (!empty($changedColumns)) {
             foreach ($changedColumns as $column) {
@@ -61,11 +62,13 @@ class MigrationSnapshot
 
                 if (isset($existingColumns[$col_name])) {
                     $current = $existingColumns[$col_name];
-                    $existingColumns[$col_name] = array_merge($current, $column->toArray());
+                    $attributes = $column->toArray();
+                    unset($attributes['change']);
+                    $existingColumns[$col_name] = array_merge($current, $attributes);
                 }
             }
 
-            $this->data[$connectionName][$databaseName][$table] = $existingColumns;
+            $this->data[$connectionName][$databaseName][$table]['columns'] = $existingColumns;
         }
 
 
@@ -78,8 +81,11 @@ class MigrationSnapshot
                 }
             }
 
-            $this->data[$connectionName][$databaseName][$table] = $existingColumns;
+            $this->data[$connectionName][$databaseName][$table]['columns'] = $existingColumns;
         }
+
+        $commands = $blueprint->getCommands();
+        $this->data[$connectionName][$databaseName][$table]['command'] = $commands;
 
     }
 
@@ -91,7 +97,8 @@ class MigrationSnapshot
 
     public function save()
     {
-        $yaml = Yaml::dump($this->get());
+        $parser = Yaml::make();
+        $yaml = $parser->toString($this->transform($this->data));
 
         $project_path =  'toolsets/builder/' . 'database' ;
         $project_real_path = storage_path($project_path);
@@ -100,7 +107,7 @@ class MigrationSnapshot
             Storage::makeDirectory($project_path);
         }
 
-        $filepath = $project_path . '/db_connections_schema.yml';
+        $filepath = $project_path . '/db_schema.yml';
 
         Storage::put($filepath, $yaml);
 
@@ -118,10 +125,11 @@ class MigrationSnapshot
             foreach ($databases as $database => $tables) {
                 $tbls = [];
 
-                foreach ($tables as $table => $columns) {
+                foreach ($tables as $table => $describer) {
                     $tbls[] = [
                         'table_name' => $table,
-                        'columns' => $columns
+                        'columns' => $describer['columns'],
+                        'command' => $describer['command']
                     ];
                 }
 

@@ -21,7 +21,8 @@
         ]
     },
     "require": {
-        "php": ">=5.6.4"
+        "php": ">=5.6.4",
+        "symfony/yaml": "^3.2"
     },
     "minimum-stability": "stable",
     "require-dev": {
@@ -30,7 +31,6 @@
         "illuminate/support": "^5.3",
         "illuminate/routing": "^5.3",
         "illuminate/container": "^5.3",
-        "symfony/yaml": "^3.2",
         "Illuminate/Database": "^5.3"
     }
 }
