@@ -10,39 +10,8 @@
     </list-panel>
 </template>
 <script>
+import { mapState } from 'vuex'
 import ListPanel from '../../../layouts/ui/ListPanel.vue'
-
-const store = {
-
-    list: [
-        {
-            id : 1,
-            name: 'ABC',
-            details: 'ABC details'
-        },
-
-        {
-            id : 2,
-            name: 'DEF',
-            details: 'DEF details'
-        },
-
-        {
-            id : 3,
-            name: 'GHI',
-            details: 'GHI details'
-        },
-
-        {
-            id : 4,
-            name: 'JKL',
-            details: 'JKL details'
-        }
-    ],
-
-    selectedIndex : null
-};
-
 
 export default {
 
@@ -50,25 +19,34 @@ export default {
         'list-panel': ListPanel
     },
 
-    data: function () {
-        return store;
+    computed: {
+        selectedItem(){
+            return this.$store.state.database.selectedItem;
+        },
+
+        selectedIndex(){
+            console.log('index computed changed', this.$store.state.database.selectedIndex);
+            return this.$store.state.database.selectedIndex
+        },
+
+        ...mapState('database',['list'])
+
     },
 
     beforeRouteEnter (to, from, next) {
         next(vm => {
-
-            if(vm.selectedIndex === undefined)
+            console.log('beforeRouteEnter', vm.$store);
+            if(to.params.key)
             {
-                vm.fireOnBus('database.table.selected', null);
+                vm.$store.dispatch('database/selectedItem', {
+                    key: to.params.key
+                })
             }
             else
             {
-                console.log('called vm.selectByKey(to.params.key);');
-                vm.selectByKey(to.params.key);
+                vm.$store.dispatch('database/selectedItem', {key:null})
             }
-
-            console.log('params key', to.params.key);
-        })
+        });
     },
 
     methods: {
@@ -84,29 +62,19 @@ export default {
 
             if(item)
             {
-                console.log('parent: child selected item is ' + item.name);
-                this.selectedIndex = item.id;
-                this.fireOnBus('database.table.selected', item);
+                this.$store.dispatch('database/selectedItem', {
+                    key: item.id
+                })
+
                 this.$router.push({
                     path: '/database/'+ item.id
                 });
+
             }
             else
             {
-                this.selectedIndex = null;
-                this.fireOnBus('database.table.selected', {});
+                vm.$store.dispatch('database/selectedItem', {key:null})
             }
-
-        },
-
-        selectByKey(key)
-        {
-            var item = _.find(this.list, function(o)
-            {
-                return o.id == key
-            });
-
-            this.tableSelected(item);
 
         }
     },

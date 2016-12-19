@@ -1,10 +1,11 @@
 <template>
     <form-panel
-            :formdata="formData"
+            :formdata="selectedItem"
             title="View">
     </form-panel>
 </template>
 <script>
+import { mapState } from 'vuex'
 import FormPanel from '../../../layouts/ui/FormPanel.vue'
 
 export default {
@@ -13,13 +14,7 @@ export default {
         'form-panel': FormPanel
     },
 
-    data: function () {
-        return {
-            formData : {
-                details: 'hard coded'
-            }
-        }
-    },
+    computed: mapState('database',['selectedItem']),
 
     methods: {
 
@@ -43,7 +38,7 @@ export default {
 
     mounted() {
         console.log('Table Form Component mounted.')
-        this.listenOnBus('database.table.selected',  this.updateFormData);
+        //this.listenOnBus('database.table.selected',  this.updateFormData);
     }
 }
 </script>

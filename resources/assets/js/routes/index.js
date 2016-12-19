@@ -5,10 +5,10 @@ const RootViewComponent = {
     template: '<router-view class="wrapper"></router-view>'
 };
 
-const store = {};
 
 
-const createRoutes = () => {
+
+const createRoutes = (store) => {
 
     return {
         path:'/',

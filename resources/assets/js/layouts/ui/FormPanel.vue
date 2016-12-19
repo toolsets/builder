@@ -1,7 +1,11 @@
 <template>
     <div>
         <h2>Form View</h2>
-        {{ formdata.details }}
+        <div v-if='formdata'>
+            <div>
+                {{formdata.details}}
+            </div>
+        </div>
     </div>
 </template>
 

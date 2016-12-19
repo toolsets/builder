@@ -22,7 +22,6 @@ export default {
 
         list: {
             type: Array,
-            default: [],
             required: true
         },
 
