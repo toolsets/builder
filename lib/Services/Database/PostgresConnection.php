@@ -10,6 +10,8 @@ namespace Toolkits\LaravelBuilder\Services\Database;
 
 
 use Illuminate\Database\PostgresConnection as LaravelPostgresConnection;
+use Toolkits\LaravelBuilder\Services\Database\Schema\Builder;
+use Toolkits\LaravelBuilder\Services\Database\Schema\Grammars\PostgresGrammar;
 use Toolkits\LaravelBuilder\Services\Database\Schema\PostgresBuilder;
 
 
@@ -24,9 +26,23 @@ class PostgresConnection extends LaravelPostgresConnection
     public function getSchemaBuilder()
     {
         if (is_null($this->schemaGrammar)) {
-            $this->useDefaultSchemaGrammar();
+            if (Builder::$snapshot) {
+                $this->setSchemaGrammar(new PostgresGrammar);
+            } else {
+                $this->useDefaultSchemaGrammar();
+            }
         }
 
-        return new PostgresBuilder($this);
+        $builder = new PostgresBuilder($this);
+
+        if (Builder::$snapshot) {
+            //when snapshot is enabled, include custom blueprint
+            $builder->blueprintResolver(function ($table, $callback) {
+
+                return new SnapshotBlueprint($table, $callback);
+            });
+        }
+
+        return $builder;
     }
 }

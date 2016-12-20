@@ -17,11 +17,11 @@ use Toolkits\LaravelBuilder\Services\Database\Schema\Builder;
 class MigrationReader extends BaseCommand
 {
 
-    protected $signature = 'builder:reader';
+    protected $signature = 'builder:read-migrations';
 
     protected $name = 'builder';
 
-    protected $description = 'Creates a builder project within Laravel App';
+    protected $description = 'Reads all migration files and generate snapshot of the database';
 
     /**
      * The migrator instance.

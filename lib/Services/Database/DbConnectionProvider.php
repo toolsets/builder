@@ -19,16 +19,12 @@ class DbConnectionProvider extends ServiceProvider
     {
         $drivers = ['mysql', 'pgsql', 'sqlite', 'sqlsrv'];
 
-        $this->app->singleton('db.connection.mysql', function ($app, $parameters) {
-            return $this->getConnection('mysql', $parameters);
-        });
-
-//        foreach ($drivers as $driver) {
-//            $key = 'db.connection.'.$driver;
-//            $this->app->singleton($key, function ($app, $parameters) use ($driver) {
-//                return $this->getConnection($driver, $parameters);
-//            });
-//        }
+        foreach ($drivers as $driver) {
+            $key = 'db.connection.'.$driver;
+            $this->app->singleton($key, function ($app, $parameters) use ($driver) {
+                return $this->getConnection($driver, $parameters);
+            });
+        }
     }
 
     private function getConnection($driver, $parameters)
