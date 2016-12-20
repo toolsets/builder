@@ -20,6 +20,8 @@ class MigrationSnapshot
 
     public static $shots = null;
 
+    public static $migrated = false;
+
 
     protected $data = [];
 
@@ -61,10 +63,16 @@ class MigrationSnapshot
                 $col_name = $column->name;
 
                 if (isset($existingColumns[$col_name])) {
-                    $current = $existingColumns[$col_name];
+                    if(!isset($existingColumns[$col_name]['attributes']))
+                    {
+                        $existingColumns[$col_name]['attributes']=[];
+                    }
+
+                    $current_attr = $existingColumns[$col_name]['attributes'];
                     $attributes = $column->toArray();
                     unset($attributes['change']);
-                    $existingColumns[$col_name] = array_merge($current, $attributes);
+                    $existingColumns[$col_name]['attributes'] = array_merge($current_attr, $attributes);
+                    $existingColumns[$col_name]['migrated'] = static::$migrated;
                 }
             }
 
@@ -77,7 +85,13 @@ class MigrationSnapshot
                 $col_name = $column->name;
 
                 if (!isset($existingColumns[$col_name])) {
-                    $existingColumns[$col_name] =  $column->toArray();
+                    if(!isset($existingColumns[$col_name]['attributes']))
+                    {
+                        $existingColumns[$col_name]['attributes']=[];
+                    }
+
+                    $existingColumns[$col_name]['attributes'] =  $column->toArray();
+                    $existingColumns[$col_name]['migrated'] = static::$migrated;
                 }
             }
 
@@ -85,7 +99,15 @@ class MigrationSnapshot
         }
 
         $commands = $blueprint->getCommands();
-        $this->data[$connectionName][$databaseName][$table]['command'] = $commands;
+
+        if(!empty($commands))
+        {
+            $table_state = $this->data[$connectionName][$databaseName][$table];
+            $newState = $this->processCommands($commands, $table_state);
+            $this->data[$connectionName][$databaseName][$table] = $newState;
+        }
+//        $this->data[$connectionName][$databaseName][$table]['command'] = $commands;
+        $this->data[$connectionName][$databaseName][$table]['migrated'] = static::$migrated;
 
     }
 
@@ -129,23 +151,40 @@ class MigrationSnapshot
                     $tbls[] = [
                         'table_name' => $table,
                         'columns' => $describer['columns'],
-                        'command' => $describer['command']
+                        'commands' => $describer['commands']
                     ];
                 }
 
-                $dbs[] = [
-                    'db_name' => $database,
+                $dbs[$database] = [
                     'tables' => $tbls
                 ];
             }
 
 
-            $formatted['connections'][] = [
-                'connection' => $connection,
+            $formatted['connections'][$connection] = [
                 'databases' => $dbs
             ];
         }
 
         return $formatted;
+    }
+
+    protected function processCommands($commands, $table_state)
+    {
+        $columns = $table_state['columns'];
+
+        if(!isset($table_state['commands']))
+        {
+            $table_state['commands'] = [];
+        }
+
+        foreach($commands as $command)
+        {
+            $command_array = $command->toArray();
+            $command_array['migrated'] = static::$migrated;
+            $table_state['commands'][] = $command_array;
+        }
+
+        return $table_state;
     }
 }

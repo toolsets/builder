@@ -10,7 +10,7 @@ namespace Toolkits\LaravelBuilder\Services\Database;
 
 
 use Illuminate\Database\MySqlConnection as LaravelMySqlConnection;
-use Toolkits\LaravelBuilder\Services\Database\Migration\MySqlBuilder;
+use Toolkits\LaravelBuilder\Services\Database\Schema\MySqlBuilder;
 
 
 class MySqlConnection extends LaravelMySqlConnection

@@ -9,6 +9,7 @@
 namespace Toolkits\LaravelBuilder;
 
 use Closure;
+use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -17,6 +18,7 @@ use Toolkits\LaravelBuilder\Services\Database\Connection;
 use Toolkits\LaravelBuilder\Services\Database\DbConnectionProvider;
 use Toolkits\LaravelBuilder\Services\Database\Migration\Console\BlueprintWatcher;
 use Toolkits\LaravelBuilder\Services\Database\Migration\Console\MigrationReader;
+use Toolkits\LaravelBuilder\Services\Database\Migration\Migrator;
 
 class LaravelBuilderServiceProvider extends ServiceProvider
 {
@@ -60,7 +62,7 @@ class LaravelBuilderServiceProvider extends ServiceProvider
     {
        $this->app->register(new DbConnectionProvider($this->app));
 
-        $this->registerMigrator();
+        $this->registerMigrationReaderCommand();
     }
 
 
@@ -70,15 +72,17 @@ class LaravelBuilderServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerMigrator()
+    protected function registerMigrationReaderCommand()
     {
+        $this->app->when(MigrationReader::class)
+            ->needs('Illuminate\Database\Migrations\Migrator')
+            ->give(function($app)
+            {
+                $repository = $app['migration.repository'];
+                return new Migrator($repository, $app['db'], $app['files']);
+            });
 
-        $this->app->singleton('command.migration_reader', function ($app) {
-
-            $migrator = $app->make('migrator');
-            $connection = $app->make('db.connection');
-            return new MigrationReader($migrator, $connection);
-        });
+        $this->app->bind('command.migration_reader', MigrationReader::class);
 
         $this->commands([
             'command.migration_reader'

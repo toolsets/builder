@@ -9,13 +9,10 @@
 namespace Toolkits\LaravelBuilder\Services\Database\Migration\Console;
 
 
-use Closure;
 use Illuminate\Database\Console\Migrations\BaseCommand;
 use Illuminate\Database\Migrations\Migrator;
-use Illuminate\Support\Facades\Schema;
-use Symfony\Component\Yaml\Yaml;
-use Toolkits\LaravelBuilder\Services\Database\Migration\Builder;
 use Toolkits\LaravelBuilder\Services\Database\Migration\MigrationSnapshot;
+use Toolkits\LaravelBuilder\Services\Database\Schema\Builder;
 
 class MigrationReader extends BaseCommand
 {

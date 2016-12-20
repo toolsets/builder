@@ -1,6 +1,13 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: raf
+ * Date: 20/12/2016
+ * Time: 1:19 PM
+ */
 
-namespace Toolkits\LaravelBuilder\Services\Database\Migration;
+namespace Toolkits\LaravelBuilder\Services\Database\Schema;
+
 
 class PostgresBuilder extends Builder
 {

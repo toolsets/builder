@@ -10,7 +10,7 @@ namespace Toolkits\LaravelBuilder\Services\Database;
 
 
 use Illuminate\Database\PostgresConnection as LaravelPostgresConnection;
-use Toolkits\LaravelBuilder\Services\Database\Migration\PostgresBuilder;
+use Toolkits\LaravelBuilder\Services\Database\Schema\PostgresBuilder;
 
 
 class PostgresConnection extends LaravelPostgresConnection

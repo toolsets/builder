@@ -2,27 +2,22 @@
 /**
  * Created by PhpStorm.
  * User: raf
- * Date: 19/12/2016
- * Time: 3:06 PM
+ * Date: 20/12/2016
+ * Time: 1:17 PM
  */
 
-namespace Toolkits\LaravelBuilder\Services\Database\Migration;
-
+namespace Toolkits\LaravelBuilder\Services\Database\Schema;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
+use Toolkits\LaravelBuilder\Services\Database\Migration\MigrationSnapshot;
 
 class Builder extends SchemaBuilder
 {
 
     public static $snapshot = false;
 
-    /**
-     * Execute the blueprint to build / modify the table.
-     *
-     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
-     * @return void
-     */
+
     protected function build(Blueprint $blueprint)
     {
         // when snapshot is enabled, the blueprint gets parse to YAML DB snapshot files
@@ -32,5 +27,4 @@ class Builder extends SchemaBuilder
             $blueprint->build($this->connection, $this->grammar);
         }
     }
-
 }
