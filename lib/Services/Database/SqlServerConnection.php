@@ -11,6 +11,8 @@ namespace Toolkits\LaravelBuilder\Services\Database;
 
 use Illuminate\Database\SqlServerConnection as LaravelSqlServerConnection;
 use Toolkits\LaravelBuilder\Services\Database\Migration\Builder;
+use Toolkits\LaravelBuilder\Services\Database\Schema\Grammars\SqlServerGrammar;
+
 
 class SqlServerConnection extends LaravelSqlServerConnection
 {
@@ -23,9 +25,23 @@ class SqlServerConnection extends LaravelSqlServerConnection
     public function getSchemaBuilder()
     {
         if (is_null($this->schemaGrammar)) {
-            $this->useDefaultSchemaGrammar();
+//            if (Builder::$snapshot) {
+//                $this->setSchemaGrammar(new SqlServerGrammar);
+//            } else {
+                $this->useDefaultSchemaGrammar();
+//            }
         }
 
-        return new Builder($this);
+        $builder =  new Builder($this);
+
+//        if (Builder::$snapshot) {
+//            //when snapshot is enabled, include custom blueprint
+//            $builder->blueprintResolver(function ($table, $callback) {
+//
+//                return new SnapshotBlueprint($table, $callback);
+//            });
+//        }
+
+        return $builder;
     }
 }

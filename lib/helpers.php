@@ -43,3 +43,32 @@ if (! function_exists('tbl_trans'))
         return app('translator')->trans($key, $parameters, $domain, $locale);
     }
 }
+
+//
+if (! function_exists('tbl_storage_path')) {
+    /**
+     * Get the path to the storage folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function tbl_storage_path($path = '')
+    {
+        $path = tbl_storage_path($path);
+        return app('path.storage').($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+}
+
+
+if (! function_exists('tbl_project_path')) {
+    /**
+     * Get the path to the storage folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function tbl_project_path($path = '')
+    {
+        return 'toolsets/builder' .($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+}
