@@ -29,65 +29,35 @@ class SnapshotBlueprint extends Blueprint
      */
     public function build(Connection $connection, Grammar $grammar)
     {
+        $this->toSnapshot($connection, $grammar);
 
-        $this->addImpliedCommands();
-
-        foreach ($this->commands as $command) {
-            $method = 'compile'.ucfirst($command->name);
-print_r('method: '.$method);
-            if (method_exists($grammar, $method)) {
-                $grammar->$method($this, $command, $connection);
-            }
-        }
-
-        dd('from snapshot blueprint', $this->getColumns());
-
-
-//        foreach ($this->toSql($connection, $grammar) as $statement) {
-//           // dd($statement);
-//            print_r($statement);
-//            print_r("\n");
-//            print_r("\n");
-//            print_r("\n");
-//            //$connection->statement($statement);
-//        }
     }
 
-
     /**
-     * Get the raw SQL statements for the blueprint.
+     * Process to the Snapshot memory from the blueprint.
      *
      * @param  \Illuminate\Database\Connection  $connection
      * @param  \Illuminate\Database\Schema\Grammars\Grammar  $grammar
-     * @return array
+     * @return void
      */
-    public function toSql(Connection $connection, Grammar $grammar)
+    public function toSnapshot(Connection $connection, Grammar $grammar)
     {
         $this->addImpliedCommands();
 
-//        dd($this->commands);
-
-        $statements = [];
-
         // Each type of command has a corresponding compiler function on the schema
-        // grammar which is used to build the necessary SQL statements to build
+        // grammar which is used to update the snapshots from
         // the blueprint element, so we'll just call that compilers function.
         foreach ($this->commands as $command) {
             $method = 'compile'.ucfirst($command->name);
 
-            print_r($method);
-            print_r("\n");
+//            if (method_exists($grammar, $method)) {
 
-            if (method_exists($grammar, $method)) {
-                if (! is_null($sql = $grammar->$method($this, $command, $connection))) {
-                   // $statements = array_merge($statements, (array) $sql);
-                }
-            }
+                // the command method on grammar will perform update to snapshot memory
+                $grammar->$method($this, $command, $connection);
+
+//            }
         }
-
-        return $statements;
     }
-
 
     /**
      * Add the commands that are implied by the blueprint.
@@ -105,5 +75,35 @@ print_r('method: '.$method);
         }
 
         $this->addFluentIndexes();
+    }
+
+    /**
+     * Add the index commands fluently specified on columns.
+     *
+     * @return void
+     */
+    protected function addFluentIndexes()
+    {
+        foreach ($this->columns as $column) {
+            foreach (['primary', 'unique', 'index'] as $index) {
+                // If the index has been specified on the given column, but is simply
+                // equal to "true" (boolean), no name has been specified for this
+                // index, so we will simply call the index methods without one.
+                if ($column->$index === true) {
+                    $this->$index($column->name);
+
+                    continue 2;
+                }
+
+                // If the index has been specified on the column and it is something
+                // other than boolean true, we will assume a name was provided on
+                // the index specification, and pass in the name to the method.
+                elseif (isset($column->$index)) {
+                    $this->$index($column->name, $column->$index);
+
+                    continue 2;
+                }
+            }
+        }
     }
 }
