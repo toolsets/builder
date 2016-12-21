@@ -27,24 +27,25 @@ class MySqlConnection extends LaravelMySqlConnection
     public function getSchemaBuilder()
     {
         if (is_null($this->schemaGrammar)) {
-            if (Builder::$snapshot) {
-                $this->setSchemaGrammar(new MySqlGrammar);
-            } else {
-                $this->useDefaultSchemaGrammar();
-            }
+            $this->useDefaultSchemaGrammar();
+//            if (Builder::$snapshot) {
+//                $this->setSchemaGrammar(new MySqlGrammar);
+//            } else {
+//                $this->useDefaultSchemaGrammar();
+//            }
 
         }
 
         $builder =  new MySqlBuilder($this);
 
 
-        if (Builder::$snapshot) {
-            //when snapshot is enabled, include custom blueprint
-            $builder->blueprintResolver(function ($table, $callback) {
-
-                return new SnapshotBlueprint($table, $callback);
-            });
-        }
+//        if (Builder::$snapshot) {
+//            //when snapshot is enabled, include custom blueprint
+//            $builder->blueprintResolver(function ($table, $callback) {
+//
+//                return new SnapshotBlueprint($table, $callback);
+//            });
+//        }
 
         return $builder;
 

@@ -25,22 +25,22 @@ class SQLiteConnection extends LaravelSQLiteConnection
     public function getSchemaBuilder()
     {
         if (is_null($this->schemaGrammar)) {
-            if (Builder::$snapshot) {
-                $this->setSchemaGrammar(new SQLiteGrammar);
-            } else {
+//            if (Builder::$snapshot) {
+//                $this->setSchemaGrammar(new SQLiteGrammar);
+//            } else {
                 $this->useDefaultSchemaGrammar();
-            }
+//            }
         }
 
         $builder =  new Builder($this);
 
-        if (Builder::$snapshot) {
-            //when snapshot is enabled, include custom blueprint
-            $builder->blueprintResolver(function ($table, $callback) {
-
-                return new SnapshotBlueprint($table, $callback);
-            });
-        }
+//        if (Builder::$snapshot) {
+//            //when snapshot is enabled, include custom blueprint
+//            $builder->blueprintResolver(function ($table, $callback) {
+//
+//                return new SnapshotBlueprint($table, $callback);
+//            });
+//        }
 
         return $builder;
     }
