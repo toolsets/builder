@@ -13,6 +13,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Fluent;
 use Toolkits\LaravelBuilder\Parsers\Yaml;
 
 
@@ -36,11 +37,13 @@ class MigrationSnapshot
     ];
 
 
-    protected $data = [];
+    protected $data;
+
+    protected $modifiers = ['enum'];
 
     public static function capture(Blueprint $blueprint, Connection $connection)
     {
-        if(is_null(static::$shots)) {
+        if (is_null(static::$shots)) {
             static::$shots = new static();
         }
 
@@ -50,6 +53,8 @@ class MigrationSnapshot
 
     public function record(Blueprint $blueprint, Connection $connection)
     {
+        $this->addFluentIndexes($blueprint);
+
         $connectionName = $connection->getName();
         $databaseName = $connection->getDatabaseName();
         $databaseDriver = $connection->getDriverName();
@@ -78,8 +83,7 @@ class MigrationSnapshot
                 $col_name = $column->name;
 
                 if (isset($existingColumns[$col_name])) {
-                    if(!isset($existingColumns[$col_name]['attributes']))
-                    {
+                    if (!isset($existingColumns[$col_name]['attributes'])) {
                         $existingColumns[$col_name]['attributes']=[];
                     }
 
@@ -106,14 +110,21 @@ class MigrationSnapshot
                 $col_name = $column->name;
 
                 if (!isset($existingColumns[$col_name])) {
-                    if(!isset($existingColumns[$col_name]['attributes']))
-                    {
+                    if (!isset($existingColumns[$col_name]['attributes'])) {
                         $existingColumns[$col_name]['attributes']=[];
                     }
 
                     //Check for primaryKey
                     if (in_array($column->type, $serials) && $column->autoIncrement) {
                         $column->primaryKey = true;
+                    }
+
+                    if (in_array($column->type, $this->modifiers)) {
+                        $modifyMethod = 'modifyType' . ucfirst($column->type);
+
+                        if (method_exists($this, $modifyMethod)) {
+                            $this->{$modifyMethod}($column);
+                        }
                     }
 
                     $existingColumns[$col_name]['attributes'] =  $column->toArray();
@@ -126,8 +137,7 @@ class MigrationSnapshot
 
         $commands = $blueprint->getCommands();
 
-        if(!empty($commands))
-        {
+        if (!empty($commands)) {
             $table_state = $this->data[$connectionName][$databaseName][$table];
             $newState = $this->processCommands($commands, $table_state);
             $this->data[$connectionName][$databaseName][$table] = $newState;
@@ -135,6 +145,70 @@ class MigrationSnapshot
 //        $this->data[$connectionName][$databaseName][$table]['command'] = $commands;
         $this->data[$connectionName][$databaseName][$table]['migrated'] = static::$migrated;
 
+    }
+
+
+    /**
+     * Add the index commands fluently specified on columns.
+     *
+     * @return void
+     */
+    protected function addFluentIndexes(Blueprint $blueprint)
+    {
+
+
+        foreach ($blueprint->getColumns() as $column) {
+            foreach (['primary', 'unique', 'index'] as $index) {
+                // If the index has been specified on the given column, but is simply
+                // equal to "true" (boolean), no name has been specified for this
+                // index, so we will simply call the index methods without one.
+                if ($column->$index === true) {
+                    $blueprint->{$index}($column->name);
+
+                    continue 2;
+                }
+
+                // If the index has been specified on the column and it is something
+                // other than boolean true, we will assume a name was provided on
+                // the index specification, and pass in the name to the method.
+                elseif (isset($column->$index)) {
+                    $blueprint->{$index}($column->name, $column->$index);
+
+                    continue 2;
+                }
+            }
+        }
+    }
+
+
+    protected function modifyTypeEnum(Fluent $column)
+    {
+        if (isset($column->allowed)) {
+            $column->length = $this->getDefaultValue($column->allowed);
+        }
+    }
+
+
+    /**
+     * Format a value so that it can be used in "default" clauses.
+     *
+     * @param  mixed   $value
+     * @return string
+     */
+    protected function getDefaultValue($value)
+    {
+        if (is_array($value)) {
+
+            $str = implode(',', $value);
+
+            return '['. $str .']';
+        }
+
+        if (is_bool($value)) {
+            return "'".(int) $value."'";
+        }
+
+        return "'".strval($value)."'";
     }
 
 

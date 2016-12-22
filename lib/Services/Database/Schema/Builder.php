@@ -20,6 +20,7 @@ class Builder extends SchemaBuilder
 
     protected function build(Blueprint $blueprint)
     {
+
         // when snapshot is enabled, the blueprint gets parse to YAML DB snapshot files
         if (static::$snapshot) {
             MigrationSnapshot::capture($blueprint, $this->connection);

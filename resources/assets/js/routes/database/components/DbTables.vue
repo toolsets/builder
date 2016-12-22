@@ -4,8 +4,8 @@
             v-on:selected="tableSelected"
             :list="list"
             :selected="selectedIndex"
-            keyBy="id"
-            display="name"
+            keyBy="table_name"
+            display="table_name"
             title="Tables">
     </list-panel>
 </template>
@@ -21,12 +21,12 @@ export default {
 
     computed: {
         selectedItem(){
-            return this.$store.state.database.selectedItem;
+            return this.$store.state.selectedItem;
         },
 
         selectedIndex(){
-            console.log('index computed changed', this.$store.state.database.selectedIndex);
-            return this.$store.state.database.selectedIndex
+            console.log('index computed changed', this.$store.state.selectedIndex);
+            return this.$store.state.selectedIndex
         },
 
         ...mapState('database',['list'])
@@ -63,11 +63,11 @@ export default {
             if(item)
             {
                 this.$store.dispatch('database/selectedItem', {
-                    key: item.id
+                    key: item.table_name
                 })
 
                 this.$router.push({
-                    path: '/database/'+ item.id
+                    path: '/database/'+ item.table_name
                 });
 
             }
@@ -76,11 +76,19 @@ export default {
                 vm.$store.dispatch('database/selectedItem', {key:null})
             }
 
+        },
+
+        fetch()
+        {
+            console.log('firing dispath to get Tables');
+            this.$store.dispatch('database/getTables');
         }
     },
 
     mounted() {
         console.log('Db Tables Component mounted.')
+
+        this.fetch();
     }
 }
 </script>

@@ -107,42 +107,21 @@ class DatabaseTables
 
         $tables = [];
 
-        if (isset($schema[$db_connection]) && isset($schema[$db_connection][$database_name])) {
-            $tables = $this->normalizeTableData($schema[$db_connection][$database_name]);
+        if (isset($schema['connections'][$db_connection])
+            && isset($schema['connections'][$db_connection]['databases'][$database_name])) {
+            $tables = $this->normalizeTableData($schema['connections'][$db_connection]['databases'][$database_name]);
         }
 
-        return $schema;
+        return [
+            'connection' => $db_connection,
+            'database' => $database_name,
+            'tables' => $tables
+        ];
     }
 
     protected function normalizeTableData($tables)
     {
-        $result = [];
-
-        foreach ($tables as $table) {
-
-            $columns = $table['columns'];
-
-            $primaryKey = null;
-
-            foreach($columns as $field => $details)
-            {
-                if (in_array($column->type, $this->serials) && $column->autoIncrement) {
-                    return ' auto_increment primary key';
-                }
-
-                 $column_details = [
-                    'name' => '',
-                    'type' => '',
-                     'length' => '',
-                     'unsigned' => '',
-                     'allow_null' => '',
-                     'auto_increment' => '',
-                     'primary_key' => '',
-                     'default' => ''
-                 ];
-            }
-
-        }
+        return array_values($tables['tables']);
     }
 
 

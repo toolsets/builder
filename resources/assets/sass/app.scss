@@ -5,10 +5,10 @@
 
 // Bootstrap
 $border-radius-base: 0;
-$brand-primary: #1b6d85;
+$brand-primary: #2e6da4;
 $component-active-bg: #95C4D1;
 $component-active-color: #000000;
-$list-group-active-border:#1b6d85;
+$list-group-active-border:#2e6da4;
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 @import "./font-awesome/font-awesome";
@@ -102,6 +102,9 @@ html, body, #app {
   }
 }
 
+.scrollable {
+  overflow-y: auto !important;
+}
 
 .title-header {
   padding: 8px;
@@ -115,4 +118,71 @@ html, body, #app {
   right:0;
   height: 2em;
   box-shadow: rgba(0,0,0,0.25) 0px 1px 1px;
+}
+
+
+.list-view-panel {
+  background-color: $brand-primary;
+}
+
+.table-form {
+  border-left:1px solid #505050;
+  height:100%;
+  position: relative;
+
+  .builder-form {
+    font-weight: normal;
+    font-style: normal;
+    font-smooth: always;
+    padding: 16px;
+    background-color: #2e6da4;
+
+    .input-title {
+
+      label {
+        color: rgba(255,255,255,0.5);
+        font-weight: normal !important;
+      }
+
+      input[type=text] {
+        font-size: 1.2em;
+        color: #FFFFFF;
+        background-color: transparent;
+        border:none;
+        border-bottom: solid 1px #fff;
+        box-shadow: none;
+      }
+    }
+
+
+  }
+
+  .list-panel{
+
+    position: relative;
+    height: 100%;
+
+    .table-section {
+      position: absolute;
+      left: 0px;
+      right: 400px;
+      top:0px;
+      bottom:0px;
+      background-color: #cdcdcd;
+      overflow-y: auto;
+    }
+
+    .column-details-section {
+      border-left:1px solid #505050;
+      position: absolute;
+      width:400px;
+      right: 0px;
+      top:0px;
+      bottom:0px;
+      background-color: #cdcdcd;
+
+    }
+  }
+
+
 }

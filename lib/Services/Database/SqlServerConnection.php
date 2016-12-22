@@ -25,22 +25,10 @@ class SqlServerConnection extends LaravelSqlServerConnection
     public function getSchemaBuilder()
     {
         if (is_null($this->schemaGrammar)) {
-//            if (Builder::$snapshot) {
-//                $this->setSchemaGrammar(new SqlServerGrammar);
-//            } else {
-                $this->useDefaultSchemaGrammar();
-//            }
+            $this->useDefaultSchemaGrammar();
         }
 
         $builder =  new Builder($this);
-
-//        if (Builder::$snapshot) {
-//            //when snapshot is enabled, include custom blueprint
-//            $builder->blueprintResolver(function ($table, $callback) {
-//
-//                return new SnapshotBlueprint($table, $callback);
-//            });
-//        }
 
         return $builder;
     }

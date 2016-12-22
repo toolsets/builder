@@ -1,4 +1,5 @@
 import ListViewLayout from '../../layouts/ListViewLayout.vue'
+import api from './api';
 
 const DbTables = resolve => {
     require.ensure(['./components/DbTables.vue'], () => {
@@ -17,37 +18,15 @@ const CreateFormComponent = { template: '<h1>Create Form</h1>'}
 
 export default (store) => {
 
-    var tables = [
-        {
-            id : 1,
-            name: 'X-ABC',
-            details: 'ABC details'
-        },
-
-        {
-            id : 2,
-            name: 'X-DEF',
-            details: 'DEF details'
-        },
-
-        {
-            id : 3,
-            name: 'X-GHI',
-            details: 'GHI details'
-        },
-
-        {
-            id : 4,
-            name: 'X-JKL',
-            details: 'JKL details'
-        }
-    ];
+    var tables = [];
 
     store.registerModule('database', {
         namespaced: true,
 
         state: {
             list: tables,
+            database: null,
+            connection: null,
             selectedIndex: null,
             selectedItem:null
         },
@@ -65,10 +44,11 @@ export default (store) => {
                 console.log({state, key})
                 var item = _.find(state.list, function(o)
                 {
-                    return o.id == key
+                    return o.table_name == key
                 });
 
-                var selectedItem = (item) ? item : null
+                var selectedItem = (item) ? _.cloneDeep(item) : null;
+
                 Vue.set(state, 'selectedItem', selectedItem);
 
                 if(item)
@@ -79,6 +59,12 @@ export default (store) => {
                 {
                     Vue.set(state, 'selectedIndex', null);
                 }
+            },
+
+            receiveTables(state, dbState){
+                Vue.set(state, 'list', dbState.tables);
+                Vue.set(state, 'database', dbState.database);
+                Vue.set(state, 'connection', dbState.connection);
             }
         },
 
@@ -86,6 +72,16 @@ export default (store) => {
             selectedItem({commit}, item){
                 console.log('action SelectedItem ', item);
                 commit('selectedItem', item.key)
+            },
+
+            getTables({commit}) {
+
+                api.getAllTables().then(function(response)
+                {
+                    console.log('response', response);
+                    commit('receiveTables', response.body)
+                });
+
             }
         }
 

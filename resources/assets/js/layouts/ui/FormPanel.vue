@@ -2,7 +2,7 @@
     <div>
         <h2>Form View</h2>
         <div v-if='formdata'>
-            <div>
+            <div class="builder-form">
                 {{formdata.details}}
             </div>
         </div>

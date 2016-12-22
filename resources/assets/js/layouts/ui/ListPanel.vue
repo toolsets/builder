@@ -1,5 +1,5 @@
 <template>
-    <div class="list-panel">
+    <div class="list-panel scrollable">
         <div class="title-header">
             {{ title }}
         </div>
@@ -50,7 +50,8 @@ export default {
         },
 
         isSelected: function (item) {
-            return this.selected == item[this.keyBy]
+            console.log('isSelected', this.selected, item[this.keyBy]);
+            return this.selected == item[this.keyBy];
         }
     }
 }

@@ -1,44 +1,166 @@
 <template>
-    <form-panel
-            :formdata="selectedItem"
-            title="View">
-    </form-panel>
+    <div v-if="selectedItem" class="table-form">
+
+        <div class="list-panel">
+            <div class="table-section">
+                <div class="title-header">
+                    Table Configuration
+                </div>
+                <div class="toolbar">
+                    <a class="btn btn-primary" title="Add" v-on:click.stop="onCreate()">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </div>
+                <div class="builder-form">
+                    <div class="form-group input-title">
+                        <label for="table_name">Table Name</label>
+                        <input type="text" class="form-control" v-model="selectedItem.table_name">
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th class="tbl-status"></th>
+                        <th>Column</th>
+                        <th>Type</th>
+                        <th>Length</th>
+                        <th>Unsigned</th>
+                        <th>Nullable</th>
+                        <th>AI</th>
+                        <th>PK</th>
+                        <th>Default</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="col in selectedItem.columns">
+                        <td v-bind:class="{ migrated: col.migrated == true, 'not-migrated': col.migrated == false}" class="tbl-status"></td>
+                        <td>{{ col.attributes.name }}</td>
+                        <td>{{ col.attributes.type }}</td>
+                        <td>{{ col.attributes.length }}</td>
+                        <td>
+                            <input type="checkbox" disabled="disabled" v-model='col.attributes.unsigned' />
+                        </td>
+                        <td><input type="checkbox" disabled="disabled" v-model='col.attributes.nullable' /></td>
+                        <td><input type="checkbox" disabled="disabled" v-model='col.attributes.autoIncrement' /></td>
+                        <td><input type="checkbox" disabled="disabled" v-model='col.attributes.primaryKey' /></td>
+                        <td>{{ col.attributes.default }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div v-if='selectedItem.relations' class="builder-form">
+                    <div class="input-title">
+                        <label>Table Relations</label>
+                    </div>
+
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Columns</th>
+                        <th>FK Table</th>
+                        <th>FK Columns</th>
+                        <th>On Update</th>
+                        <th>On Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="fk in selectedItem.relations">
+                        <td>{{ fk.index }}</td>
+                        <td>{{ fk.columns }}</td>
+                        <td>{{ fk.fk_table }}</td>
+                        <td>{{ fk.fk_column }}</td>
+                        <td>{{ fk.on_update ? fk.on_update : '' }}</td>
+                        <td>{{ fk.on_delete ? fk.on_delete : '' }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div v-if='selectedItem.indexes' class="builder-form">
+                    <div class="input-title">
+                        <label>Table Indexes</label>
+                    </div>
+
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Columns</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="indx in selectedItem.indexes">
+                        <td>{{ indx.index }}</td>
+                        <td>{{ indx.columns }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="column-details-section">
+                <div class="title-header">
+                    Properties
+                </div>
+                <div class="toolbar">
+
+                </div>
+            </div>
+        </div>
 </template>
 <script>
 import { mapState } from 'vuex'
-import FormPanel from '../../../layouts/ui/FormPanel.vue'
+
 
 export default {
 
-    components: {
-        'form-panel': FormPanel
-    },
+    data() {
 
-    computed: mapState('database',['selectedItem']),
-
-    methods: {
-
-        updateFormData : function(formData)
-        {
-            console.log('updateFormData method fired');
-            this.formData = formData;
+        return {
+            formData : {}
         }
     },
-//
-//    beforeRouteEnter (to, from, next) {
-//        next(vm => {
-//            console.log('to', to);
-//            vm.selectedIndex = to.params.key
-//        })
-//    },
 
 
+    computed: {
 
+        selectedItem(){
+            return this.$store.state.database.selectedItem;
+        }
+    },
 
 
     mounted() {
         console.log('Table Form Component mounted.')
+        console.log(this.$store.state);
         //this.listenOnBus('database.table.selected',  this.updateFormData);
     }
 }
 </script>
+<style lang="sass" scoped>
+.toolbar {
+    padding: 8px;
+    background-color: #ebeaee;
+
+    .btn {
+        font-size: .8em;
+    }
+
+}
+.table {
+    font-size: 1em;
+    background-color: #FFF;
+
+    .tbl-status {
+        width: 10px;
+        padding: 0;
+    }
+
+    td.migrated {
+        background-color: #2b542c;
+    }
+
+    td.not-migrated {
+        background-color: #985f0d;
+    }
+}
+</style>

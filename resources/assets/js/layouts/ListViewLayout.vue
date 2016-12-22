@@ -33,7 +33,6 @@ export default {
     bottom:0;
     left:0;
     right:0;
-    background-color: #1b6d85;
 
     .list-panel {
         width: 350px;
