@@ -9,6 +9,8 @@
 namespace Toolkits\LaravelBuilder;
 
 use Closure;
+use Illuminate\Database\Console\Migrations\MigrateCommand;
+use Illuminate\Database\Migrations\DatabaseMigrationRepository;
 use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -74,6 +76,16 @@ class LaravelBuilderServiceProvider extends ServiceProvider
      */
     protected function registerMigrationReaderCommand()
     {
+        $this->registerMigrator();
+
+//        $this->app->when(MigrateCommand::class)
+//            ->needs('Illuminate\Database\Migrations\Migrator')
+//            ->give(function($app)
+//            {
+//                $repository = $app['migration.repository'];
+//                return new Migrator($repository, $app['db'], $app['files']);
+//            });
+//
         $this->app->when(MigrationReader::class)
             ->needs('Illuminate\Database\Migrations\Migrator')
             ->give(function($app)
@@ -82,11 +94,33 @@ class LaravelBuilderServiceProvider extends ServiceProvider
                 return new Migrator($repository, $app['db'], $app['files']);
             });
 
+
         $this->app->bind('command.migration_reader', MigrationReader::class);
 
         $this->commands([
             'command.migration_reader'
         ]);
+    }
+
+
+    /**
+     * Register the migrator service.
+     *
+     * @return void
+     */
+    protected function registerMigrator()
+    {
+        // The migrator is responsible for actually running and rollback the migration
+        // files in the application. We'll pass in our database connection resolver
+        // so the migrator can resolve any of these connections when it needs to.
+        $this->app->afterResolving(function(DatabaseMigrationRepository $repo)
+        {
+            $this->app->singleton('migrator', function ($app) use($repo) {
+
+                return new Migrator($repo, $app['db'], $app['files']);
+            });
+        });
+
     }
 
 

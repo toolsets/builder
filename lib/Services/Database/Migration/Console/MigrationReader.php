@@ -57,7 +57,7 @@ class MigrationReader extends BaseCommand
     {
         Builder::$snapshot = true;
 
-        $this->migrator->run($this->getMigrationPaths(), [
+        $this->migrator->runSnapshot($this->getMigrationPaths(), [
             'pretend' => true
         ]);
 

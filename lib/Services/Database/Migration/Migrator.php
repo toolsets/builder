@@ -11,6 +11,8 @@ namespace Toolkits\LaravelBuilder\Services\Database\Migration;
 
 use Illuminate\Database\Migrations\Migrator as LaravelMigrator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
+use Toolkits\LaravelBuilder\Services\Database\Schema\Builder;
 
 class Migrator extends LaravelMigrator
 {
@@ -22,7 +24,7 @@ class Migrator extends LaravelMigrator
      * @param  array  $options
      * @return array
      */
-    public function run($paths = [], array $options = [])
+    public function runSnapshot($paths = [], array $options = [])
     {
         $this->notes = [];
 
@@ -54,6 +56,36 @@ class Migrator extends LaravelMigrator
         $this->requireFiles($migrations);
 
         $this->runMigrationList($migrations, $options);
+
+        return $migrations;
+    }
+
+
+    public function run($paths = [], array $options = [])
+    {
+        $migrations =  parent::run($paths, $options);
+
+        Artisan::call('builder:read-migrations');
+
+        return $migrations;
+    }
+
+
+    public function rollback($paths = [], array $options = [])
+    {
+        $migrations =  parent::rollback($paths, $options);
+
+        Artisan::call('builder:read-migrations');
+
+        return $migrations;
+    }
+
+
+    public function reset($paths = [], $pretend = false)
+    {
+        $migrations =  parent::reset($paths, $pretend);
+
+        Artisan::call('builder:read-migrations');
 
         return $migrations;
     }

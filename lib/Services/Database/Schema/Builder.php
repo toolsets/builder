@@ -10,6 +10,7 @@ namespace Toolkits\LaravelBuilder\Services\Database\Schema;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
+use Illuminate\Support\Facades\Artisan;
 use Toolkits\LaravelBuilder\Services\Database\Migration\MigrationSnapshot;
 
 class Builder extends SchemaBuilder
@@ -20,7 +21,6 @@ class Builder extends SchemaBuilder
 
     protected function build(Blueprint $blueprint)
     {
-
         // when snapshot is enabled, the blueprint gets parse to YAML DB snapshot files
         if (static::$snapshot) {
             MigrationSnapshot::capture($blueprint, $this->connection);

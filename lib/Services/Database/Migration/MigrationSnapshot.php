@@ -53,6 +53,7 @@ class MigrationSnapshot
 
     public function record(Blueprint $blueprint, Connection $connection)
     {
+//dd('testing', $blueprint);
         $this->addFluentIndexes($blueprint);
 
         $connectionName = $connection->getName();
@@ -156,6 +157,23 @@ class MigrationSnapshot
     protected function addFluentIndexes(Blueprint $blueprint)
     {
 
+        //check if  migrated, column needs to be relocated after a field
+        if(static::$migrated) {
+
+            $columns = $blueprint->getColumns();
+
+
+            foreach ($columns as $column) {
+
+                if (isset($column->after)) {
+                    $afterColumn = $column->after;
+                    if ($afterColumn !== $column->name) {
+
+                    }
+                }
+
+            }
+        }
 
         foreach ($blueprint->getColumns() as $column) {
             foreach (['primary', 'unique', 'index'] as $index) {

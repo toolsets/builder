@@ -17,7 +17,7 @@
                         <input type="text" class="form-control" v-model="selectedItem.table_name">
                     </div>
                 </div>
-                <table class="table table-striped">
+                <table class="table table-striped table-responsive">
                     <thead>
                     <tr>
                         <th class="tbl-status"></th>
@@ -53,7 +53,7 @@
                     </div>
 
                 </div>
-                <table class="table table-striped">
+                <table class="table table-striped table-responsive">
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -82,7 +82,7 @@
                     </div>
 
                 </div>
-                <table class="table table-striped">
+                <table class="table table-striped table-responsive">
                     <thead>
                     <tr>
                         <th>Name</th>
