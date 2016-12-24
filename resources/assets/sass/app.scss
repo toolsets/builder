@@ -165,22 +165,11 @@ html, body, #app {
     .table-section {
       position: absolute;
       left: 0px;
-      right: 400px;
-      top:0px;
-      bottom:0px;
-      background-color: #cdcdcd;
-      overflow-y: auto;
-    }
-
-    .column-details-section {
-      border-left:1px solid #505050;
-      position: absolute;
-      width:400px;
       right: 0px;
       top:0px;
       bottom:0px;
       background-color: #cdcdcd;
-
+      overflow-y: auto;
     }
   }
 

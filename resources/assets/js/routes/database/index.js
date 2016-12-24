@@ -1,4 +1,6 @@
 import ListViewLayout from '../../layouts/ListViewLayout.vue'
+import UiSplitViewController from '../../layouts/UiSplitViewController.vue'
+
 import api from './api';
 
 const DbTables = resolve => {
@@ -32,7 +34,7 @@ export default (store) => {
         },
 
         getters: {
-            selectedItem(state){
+            getSelectedItem(state){
                 return state.selectedItem;
             }
         },
@@ -41,7 +43,7 @@ export default (store) => {
             selectedItem(state, key){
 
                 console.log('mutation')
-                console.log({state, key})
+                console.log(state, key)
                 var item = _.find(state.list, function(o)
                 {
                     return o.table_name == key
@@ -69,9 +71,9 @@ export default (store) => {
         },
 
         actions: {
-            selectedItem({commit}, item){
-                console.log('action SelectedItem ', item);
-                commit('selectedItem', item.key)
+            selectedItem({commit}, itemIndex){
+                console.log('action SelectedItem ', itemIndex);
+                commit('selectedItem', itemIndex)
             },
 
             getTables({commit}) {
@@ -90,7 +92,7 @@ export default (store) => {
     return {
         path: 'database',
         components: {
-            default: ListViewLayout,
+            default: UiSplitViewController,
         },
         children: [
             {

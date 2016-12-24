@@ -124,6 +124,7 @@ export default {
     computed: {
 
         selectedItem(){
+            console.log('SELECTED ITEM TRIGERRED');
             return this.$store.state.database.selectedItem;
         }
     },

@@ -1,7 +1,7 @@
 <template>
     <div class="list-panel scrollable">
         <div class="title-header">
-            {{ title }}
+            {{ title }} s: {{ selected }}
         </div>
         <div class="toolbar">
             <a class="btn btn-primary" title="Add" v-on:click.stop="onCreate()">
@@ -35,7 +35,7 @@ export default {
             required: true
         },
 
-        selected: null
+        selected: String
     },
 
 

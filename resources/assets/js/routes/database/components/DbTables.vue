@@ -3,14 +3,14 @@
             v-on:create="createNew"
             v-on:selected="tableSelected"
             :list="list"
-            :selected="selectedIndex"
+            :selected="getSelectedItem.table_name"
             keyBy="table_name"
             display="table_name"
             title="Tables">
     </list-panel>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import ListPanel from '../../../layouts/ui/ListPanel.vue'
 
 export default {
@@ -20,17 +20,8 @@ export default {
     },
 
     computed: {
-        selectedItem(){
-            return this.$store.state.selectedItem;
-        },
-
-        selectedIndex(){
-            console.log('index computed changed', this.$store.state.selectedIndex);
-            return this.$store.state.selectedIndex
-        },
-
-        ...mapState('database',['list'])
-
+        ...mapGetters('database',['getSelectedItem']),
+        ...mapState('database',['list', 'selectedItem', 'selectedIndex']),
     },
 
     beforeRouteEnter (to, from, next) {
@@ -38,13 +29,13 @@ export default {
             console.log('beforeRouteEnter', vm.$store);
             if(to.params.key)
             {
-                vm.$store.dispatch('database/selectedItem', {
-                    key: to.params.key
-                })
+                   console.log('param key = ' + to.params.key);
+                vm.$store.dispatch('database/selectedItem', to.params.key)
             }
             else
             {
-                vm.$store.dispatch('database/selectedItem', {key:null})
+                console.log('no key found');
+                vm.$store.dispatch('database/selectedItem', null)
             }
         });
     },
@@ -62,9 +53,8 @@ export default {
 
             if(item)
             {
-                this.$store.dispatch('database/selectedItem', {
-                    key: item.table_name
-                })
+            console.log('table item clicked:', item.table_name);
+                this.$store.dispatch('database/selectedItem', item.table_name)
 
                 this.$router.push({
                     path: '/database/'+ item.table_name
@@ -73,7 +63,7 @@ export default {
             }
             else
             {
-                vm.$store.dispatch('database/selectedItem', {key:null})
+                vm.$store.dispatch('database/selectedItem', null)
             }
 
         },

@@ -26,6 +26,10 @@ Vue.use(VueRouter);
 window.Vuex = require('vuex');
 Vue.use(Vuex);
 
+window.vMediaQuery = require('v-media-query');
+
+Vue.use(vMediaQuery.default);
+
 
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of
