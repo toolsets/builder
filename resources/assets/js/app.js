@@ -1,8 +1,8 @@
 //load application bootstrap file
-require('./bootstrap')
+require('./bootstrap');
 
-import createStore from './store/createStore'
-import { sync } from 'vuex-router-sync'
+import createStore from './store/createStore';
+import { sync } from 'vuex-router-sync';
 
 Vue.component('main-nav', require('./components/MainNav.vue'));
 

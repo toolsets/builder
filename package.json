@@ -12,10 +12,12 @@
     "laravel-elixir-vue-2": "^0.2.0",
     "laravel-elixir-webpack-official": "^1.0.2",
     "lodash": "^4.16.2",
+    "v-media-query": "^1.0.3",
     "vue": "^2.0.1",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.1.1",
     "vuex": "^2.1.1",
+    "vuex-connect": "^1.1.2",
     "vuex-router-sync": "^4.0.1"
   }
 }

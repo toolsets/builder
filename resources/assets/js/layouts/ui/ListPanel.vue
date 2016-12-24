@@ -1,5 +1,5 @@
 <template>
-    <div class="list-panel scrollable">
+    <div class="list-panel">
         <div class="title-header">
             {{ title }} s: {{ selected }}
         </div>
@@ -8,8 +8,8 @@
                 <i class="fa fa-plus"></i>
             </a>
         </div>
-        <div class="list-group">
-            <a  v-for="item in list" v-bind:class="{ active: isSelected(item) }" class="list-group-item" v-on:click.stop="onItemClick(item)">{{ item[display] }}</a>
+        <div class="list-group scrollable" ref="listItemGroup">
+            <a  v-for="(item, index) in list" v-bind:class="{ active: isSelected(item, index) }" class="list-group-item" v-on:click.stop="onItemClick(item, index)">{{ item[display] }}</a>
         <div>
     </div>
 </template>
@@ -49,9 +49,20 @@ export default {
             this.$emit('selected', item)
         },
 
-        isSelected: function (item) {
-            console.log('isSelected', this.selected, item[this.keyBy]);
-            return this.selected == item[this.keyBy];
+        isSelected: function (item, index) {
+
+            if(this.selected)
+            {
+
+                if(this.selected == item[this.keyBy])
+                {
+                    //console.log(this.$refs.listItemGroup);
+                    return true;
+                }
+
+                return false;
+            }
+
         }
     }
 }
@@ -59,6 +70,15 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.list-panel {
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+
+}
+
 .toolbar {
     padding:8px;
     background-color: #ebeaee;
@@ -69,5 +89,12 @@ export default {
 }
 .list-group {
     font-size: 1em;
+
+    &.scrollable {
+        position: absolute;
+        top:78px;
+        bottom:0px;
+        width:100%;
+    }
 }
 </style>

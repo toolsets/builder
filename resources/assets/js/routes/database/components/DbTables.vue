@@ -3,7 +3,7 @@
             v-on:create="createNew"
             v-on:selected="tableSelected"
             :list="list"
-            :selected="getSelectedItem.table_name"
+            :selected="selectedIndex"
             keyBy="table_name"
             display="table_name"
             title="Tables">
@@ -30,12 +30,12 @@ export default {
             if(to.params.key)
             {
                    console.log('param key = ' + to.params.key);
-                vm.$store.dispatch('database/selectedItem', to.params.key)
+                vm.$store.dispatch('database/setSelectedItemIndex', to.params.key)
             }
             else
             {
                 console.log('no key found');
-                vm.$store.dispatch('database/selectedItem', null)
+                vm.$store.dispatch('database/setSelectedItemIndex', null)
             }
         });
     },
@@ -53,8 +53,8 @@ export default {
 
             if(item)
             {
-            console.log('table item clicked:', item.table_name);
-                this.$store.dispatch('database/selectedItem', item.table_name)
+            console.log('table item clicked:', item);
+                this.$store.dispatch('database/selectedItem', item)
 
                 this.$router.push({
                     path: '/database/'+ item.table_name

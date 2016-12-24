@@ -7,14 +7,18 @@
                     Table Configuration
                 </div>
                 <div class="toolbar">
+                    <a class="btn btn-default" title="Back" v-if="showBackButton">
+                        <i class="fa fa-chevron-left" v-on:click.stop="goBack()"></i>
+                    </a>
                     <a class="btn btn-primary" title="Add" v-on:click.stop="onCreate()">
                         <i class="fa fa-plus"></i>
                     </a>
+
                 </div>
                 <div class="builder-form">
                     <div class="form-group input-title">
                         <label for="table_name">Table Name</label>
-                        <input type="text" class="form-control" v-model="selectedItem.table_name">
+                        <div class="form-control">{{selectedItem.table_name}}</div>
                     </div>
                 </div>
                 <table class="table table-striped table-responsive">
@@ -97,14 +101,6 @@
                     </tbody>
                 </table>
             </div>
-            <div class="column-details-section">
-                <div class="title-header">
-                    Properties
-                </div>
-                <div class="toolbar">
-
-                </div>
-            </div>
         </div>
 </template>
 <script>
@@ -123,9 +119,23 @@ export default {
 
     computed: {
 
-        selectedItem(){
-            console.log('SELECTED ITEM TRIGERRED');
-            return this.$store.state.database.selectedItem;
+        showBackButton(){
+          if(this.$parent.showLeft == false)
+          {
+              return true;
+          }
+
+          return false;
+        },
+
+        ...mapState('database',['selectedItem', 'selectedIndex']),
+    },
+
+
+    methods: {
+
+        goBack() {
+            this.$router.push({ path: '/database' })
         }
     },
 
