@@ -8,6 +8,7 @@ export default {
 
     state: {
         list: tables,
+        tables_list: [],
         database: null,
         connection: null,
         selectedIndex: null,
@@ -40,6 +41,7 @@ export default {
         },
 
         receiveTables(state, dbState){
+            Vue.set(state, 'tables_list', dbState.tables_list);
             Vue.set(state, 'list', dbState.tables);
             Vue.set(state, 'database', dbState.database);
             Vue.set(state, 'connection', dbState.connection);

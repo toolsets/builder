@@ -106,16 +106,21 @@ class DatabaseTables
         $schema = Yaml::make()->parse($content);
 
         $tables = [];
+        $tables_list = [];
 
         if (isset($schema['connections'][$db_connection])
             && isset($schema['connections'][$db_connection]['databases'][$database_name])) {
             $tables = $this->normalizeTableData($schema['connections'][$db_connection]['databases'][$database_name]);
+            foreach ($tables as $table) {
+                $tables_list[] = $table['table_name'];
+            }
         }
 
         return [
             'connection' => $db_connection,
             'database' => $database_name,
-            'tables' => $tables
+            'tables' => $tables,
+            'tables_list' => $tables_list
         ];
     }
 

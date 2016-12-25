@@ -31,6 +31,11 @@ window.vMediaQuery = require('v-media-query');
 Vue.use(vMediaQuery.default);
 
 
+require('json-editor');
+// Set default options
+JSONEditor.defaults.options.theme = 'bootstrap3';
+
+
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of
  * the outgoing requests issued by this application. The CSRF middleware
@@ -39,7 +44,6 @@ Vue.use(vMediaQuery.default);
 
 Vue.http.interceptors.push((request, next) => {
     request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
-
     next();
 });
 

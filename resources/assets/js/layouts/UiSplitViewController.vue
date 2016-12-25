@@ -1,11 +1,15 @@
 <template>
     <div class="ui-split-view">
         <div class="ui-split-list-view" v-if="showLeft">
-            <router-view  name="list">
+            <div class="scrollable-container">
+                <router-view  name="list"></router-view>
+            </div>
         </div>
 
         <div class="ui-split-detail-view" v-if="showRight">
-            <router-view  name="form"></router-view>
+            <div class="scrollable-container">
+                <router-view  name="form"></router-view>
+            </div>
         </div>
 
     </div>
@@ -22,10 +26,33 @@
             position: relative;
             top:0;
             bottom:0;
+
+            .scrollable-container {
+                position: absolute;
+                top:0;
+                left:0;
+                right:0;
+                bottom:0;
+                overflow-y: auto;
+                width:100%;
+            }
         }
 
         .ui-split-detail-view {
             flex: 3;
+            position: relative;
+            top:0;
+            bottom:0;
+
+            .scrollable-container {
+                position: absolute;
+                top:0;
+                left:0;
+                right:0;
+                bottom:0;
+                overflow-y: auto;
+                width:100%;
+            }
         }
     }
 

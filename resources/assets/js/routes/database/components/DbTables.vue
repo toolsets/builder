@@ -27,14 +27,9 @@ export default {
     beforeRouteEnter (to, from, next) {
         next(vm => {
             console.log('beforeRouteEnter', vm.$store);
-            if(to.params.key)
-            {
-                   console.log('param key = ' + to.params.key);
+            if(to.params.key) {
                 vm.$store.dispatch('database/setSelectedItemIndex', to.params.key)
-            }
-            else
-            {
-                console.log('no key found');
+            } else {
                 vm.$store.dispatch('database/setSelectedItemIndex', null)
             }
         });
@@ -49,35 +44,24 @@ export default {
             });
         },
 
-        tableSelected(item){
+        tableSelected(item) {
 
-            if(item)
-            {
-            console.log('table item clicked:', item);
+            if(item) {
                 this.$store.dispatch('database/selectedItem', item)
-
                 this.$router.push({
                     path: '/database/'+ item.table_name
                 });
-
-            }
-            else
-            {
+            } else {
                 vm.$store.dispatch('database/selectedItem', null)
             }
-
         },
 
-        fetch()
-        {
-            console.log('firing dispath to get Tables');
+        fetch() {
             this.$store.dispatch('database/getTables');
         }
     },
 
     mounted() {
-        console.log('Db Tables Component mounted.')
-
         this.fetch();
     }
 }

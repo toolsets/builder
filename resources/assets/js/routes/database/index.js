@@ -13,8 +13,14 @@ const TableForm = resolve => {
     })
 }
 
+
+const CreateFormComponent = resolve => {
+    require.ensure(['./components/CreateForm.vue'], () => {
+        resolve(require('./components/CreateForm.vue'))
+    })
+}
+
 const EmptyFormComponent = { template: '<div></div>'}
-const CreateFormComponent = { template: '<h1>Create Form</h1>'}
 
 
 import ReduxStore from './store'
@@ -41,6 +47,14 @@ export default (store) => {
 
             {
                 path: 'create',
+                components: {
+                    list: DbTables,
+                    form: CreateFormComponent
+                }
+            },
+
+            {
+                path: 'update',
                 components: {
                     list: DbTables,
                     form: CreateFormComponent

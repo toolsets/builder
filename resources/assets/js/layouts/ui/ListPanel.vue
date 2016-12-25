@@ -57,16 +57,19 @@ export default {
                 if(this.selected == item[this.keyBy])
                 {
                      this.$nextTick(function () {
-                        console.log('next Tick');
                         var parentContainer = this.$el.querySelector('div.list-group');
                         var activeElm = parentContainer.querySelectorAll('.active');
-                        console.log(activeElm);
                         if(activeElm.length)
                         {
-                            console.log('activeElm.offsetTop', activeElm[0].offsetTop);
-                            parentContainer.scrollTop = activeElm[0].offsetTop;
+                            var parentScrollTop = parentContainer.scrollTop;
+                            var visibleHeight = parentContainer.offsetHeight;
+                            var activeElementTop = activeElm[0].offsetTop;
+                            var visibleViewPortEnd = parentScrollTop + visibleHeight;
+
+                            if((activeElementTop > visibleViewPortEnd) || (activeElementTop < parentScrollTop)) {
+                                parentContainer.scrollTop = activeElementTop;
+                            }
                         }
-                        console.log(this.$el.querySelector('div.list-group > a.active').style.top);
                      });
 
                     return true;
