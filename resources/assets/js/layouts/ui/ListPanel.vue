@@ -56,7 +56,19 @@ export default {
 
                 if(this.selected == item[this.keyBy])
                 {
-                    //console.log(this.$refs.listItemGroup);
+                     this.$nextTick(function () {
+                        console.log('next Tick');
+                        var parentContainer = this.$el.querySelector('div.list-group');
+                        var activeElm = parentContainer.querySelectorAll('.active');
+                        console.log(activeElm);
+                        if(activeElm.length)
+                        {
+                            console.log('activeElm.offsetTop', activeElm[0].offsetTop);
+                            parentContainer.scrollTop = activeElm[0].offsetTop;
+                        }
+                        console.log(this.$el.querySelector('div.list-group > a.active').style.top);
+                     });
+
                     return true;
                 }
 
