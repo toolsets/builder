@@ -18,6 +18,11 @@ export default {
     getters: {
         getSelectedItem(state){
             return state.selectedItem;
+        },
+
+        getTablesList(state) {
+            //returns sorted list of list
+            return state.tables_list.sort();
         }
     },
 
@@ -54,6 +59,9 @@ export default {
 
                 Vue.set(state, 'selectedItem', selectedItem);
             }
+
+            console.log('receiveTables');
+
         }
     },
 
@@ -70,6 +78,7 @@ export default {
 
         getTables({commit}) {
 
+            console.log('calling getAllTables from store');
             api.getAllTables().then(function(response)
             {
                 console.log('response', response);

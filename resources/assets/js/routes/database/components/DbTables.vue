@@ -63,6 +63,7 @@ export default {
 
     mounted() {
         this.fetch();
+        console.log('mounted');
     }
 }
 </script>

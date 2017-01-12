@@ -144,13 +144,14 @@ html, body, #app {
         font-weight: normal !important;
       }
 
-      .form-control {
+      div.form-control {
         font-size: 1.2em;
         color: #FFFFFF;
         background-color: transparent;
         border:none;
         border-bottom: solid 1px #fff;
         box-shadow: none;
+
       }
     }
 

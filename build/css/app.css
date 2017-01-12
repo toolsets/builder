@@ -10856,7 +10856,7 @@ html, body, #app {
   font-weight: normal !important;
 }
 
-.table-form .builder-form .input-title .form-control {
+.table-form .builder-form .input-title div.form-control {
   font-size: 1.2em;
   color: #FFFFFF;
   background-color: transparent;

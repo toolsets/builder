@@ -1,21 +1,119 @@
 <template>
-    <div class="list-panel">
-        <div class="table-section">
-            <div class="title-header">
-                New Table Migration
-            </div>
-            <div class="toolbar">
+    <div class="table-form">
+        <div class="list-panel">
+            <div class="table-section">
+                <div class="title-header">
+                    New Table Migration : {{ form.name }}
+                </div>
+
+                <div class="builder-form">
+                    <div class="builder-form">
+                        <div class="form-group input-title">
+                            <label for="table_name">Table Name</label>
+                            <input type="text" class="form-control" v-model="form.name" ></input>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="builder-form">
+                    <div class="input-title">
+                        <label>Table Columns | {{ Object.keys(listOfColumns).length }}</label>
+                    </div>
+                </div>
+
+
+                <div class="toolbar">
+                    <a class="btn btn-primary" title="Add Column" @click="addColumn" >Add Column</a>
+                </div>
+
+                <table class="table table-striped table-responsive">
+                    <thead>
+                    <tr>
+                        <th class="col-name">Column</th>
+                        <th class="col-type">Type</th>
+                        <th>Length</th>
+                        <th>Unsigned</th>
+                        <th>Nullable</th>
+                        <th>AI</th>
+                        <th>PK</th>
+                        <th>Default</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="col in form.columns">
+                            <td v-bind:class="{'has-error': col.has_error == true}"><input type='text' class="form-control" v-model="col.name"  /></td>
+                            <td >
+                                <select v-model="col.type" class="form-control">
+                                    <option v-for="option in columnTypes" v-bind:value="option">
+                                        {{ option }}
+                                    </option>
+                                </select>
+                            </td>
+                            <td></td>
+                            <td ><input type="checkbox" value="1" v-model="col.unsigned" /></td>
+                            <td><input type="checkbox" value="1" v-model="col.nullable" /></td>
+                            <td><input type="checkbox" value="1" v-model="col.ai" /></td>
+                            <td><input type="checkbox" value="1" v-model="col.pk" /></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="builder-form">
+                    <div class="input-title">
+                        <label>Table Relations</label>
+                    </div>
+                </div>
+
+                <div class="toolbar">
+                    <a class="btn btn-primary" title="Add Relation">Add Relation</a>
+                </div>
+
+                <table class="table table-striped table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Columns</th>
+                        <th>FK Table</th>
+                        <th>FK Columns</th>
+                        <th>On Update</th>
+                        <th>On Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+
+
+                <div class="builder-form">
+                    <div class="input-title">
+                        <label>Table Indexes</label>
+                    </div>
+                </div>
+
+                <div class="toolbar">
+                    <a class="btn btn-primary" title="Add Index">Add Index</a>
+                </div>
+
+                <table class="table table-striped table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Columns</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
 
             </div>
-            <div class="builder-form">
-
-            </div>
-
         </div>
     </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 const ColumnTypes = [
     "bigIncrements",
@@ -64,113 +162,21 @@ const ColumnTypes = [
     "uuid"
 ];
 
-const formSchema = {
-    "title": "New Migration",
-    "type": "object",
-    "properties": {
-        "table_name": {
-            "title": "Table Name",
-            "type": "string",
-            "description": "Name of the table to be created",
-            "minLength": 4
-        },
-
-        "columns": {
-            "type": "array",
-            "format": "table",
-            "title": "Columns",
-            "uniqueItems": true,
-            "items": {
-                "type": "object",
-                "title": "Column",
-                "properties": {
-                    "type": {
-                        'title': "Type",
-                        "type": "string",
-                        "enum": ColumnTypes,
-                        "default": "string"
-                    },
-                    "name": {
-                        "title": "Name",
-                        "type": "string"
-                    },
-                    "length": {
-                        "title": "Length",
-                        "type": "string"
-                    },
-                    "default": {
-                        "title": "Default",
-                        "type": "string"
-                    },
-                    "nullable" : {
-                        "title": "Nullable",
-                        "type": "boolean",
-                        "format": "checkbox"
-                    },
-                    "index" : {
-                        "title": "Index",
-                        "type": "boolean",
-                        "format": "checkbox"
-                    }
-                }
-            }
-        },
-
-        "fk_relations": {
-            "type": "array",
-            "format": "table",
-            "title": "FK Relations",
-            "uniqueItems": true,
-            "items": {
-                "type": "object",
-                "title": "Relation",
-                "properties": {
-
-                    "field": {
-                        'title': "Field",
-                        "type": "string",
-                        "watch": {
-                            "fields": "columns"
-                        },
-                        "enumSource": [
-                            {
-                                "source" : "fields",
-                                "title" : "{{ item.name }}",
-                                "value" : "{{ item.name }}"
-                            }
-                        ]
-                    },
-
-                    "fk_table": {
-                        'title': "FK Table",
-                        "type": "string",
-                        "enum": []
-                    },
-
-                    "fk_field": {
-                        'title': "FK Field",
-                        "type": "string",
-                        "enum": []
-                    },
-
-                }
-            }
-        }
-    }
-};
-
-import SchemaFormEditor from '../../../layouts/ui/SchemaFormEditor.vue'
 
 export default {
 
     data() {
 
         return {
-            formData : {},
-            formSchema: {}
+            form : {
+                name: null,
+                columns: [],
+                relations: [],
+                index: []
+            },
+            columnTypes : ColumnTypes
         }
     },
-
 
     computed: {
 
@@ -183,9 +189,32 @@ export default {
             return false;
         },
 
-        ...mapState('database',['tables_list']),
-    },
+        listOfColumns() {
 
+            var list = {};
+
+            if(this.form.columns.length > 0) {
+                this.form.columns.map(function(item) {
+                    if(item.name)
+                    {
+                        if(_.has(list, item.name)) {
+                            list[item.name] = list[item.name] + 1;
+                            item.has_error = true;
+                        } else {
+                            list[item.name] = 1;
+                            item.has_error = false;
+                        }
+                    }
+
+                    return item;
+                });
+            }
+
+            return list;
+        },
+
+        ...mapGetters('database',['getTablesList']),
+    },
 
     methods: {
 
@@ -193,8 +222,41 @@ export default {
             this.$router.push({ path: '/database' })
         },
 
-    },
+        addColumn() {
+            var col = {
+                name: null,
+                type: 'string',
+                length: null,
+                unsigned: null,
+                nullable: false,
+                ai: false,
+                pk: false,
+                default: null,
+                has_error: false,
+            };
 
+            if(this.form.columns.length == 0)
+            {
+                col.type = 'increments';
+                col.pk = true;
+                col.ai = true;
+            }
+
+            this.form.columns.push(col);
+        },
+
+        hasColumnError(col) {
+
+            if(this.col !== undefined && this.col.name !== undefined) {
+                if(this.listOfColumns[col.name] > 1) {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+    },
 
     mounted() {
 
@@ -206,26 +268,34 @@ export default {
     padding: 8px;
     background-color: #ebeaee;
 
-.btn {
-    font-size: .8em;
-}
+    .btn {
+        font-size: .8em;
+    }
 
 }
 .table {
     font-size: 1em;
     background-color: #FFF;
 
-.tbl-status {
-    width: 10px;
-    padding: 0;
-}
+    .tbl-status {
+        width: 10px;
+        padding: 0;
+    }
 
-td.migrated {
-    background-color: #2b542c;
-}
+    td.migrated {
+        background-color: #2b542c;
+    }
 
-td.not-migrated {
-    background-color: #985f0d;
-}
+    td.not-migrated {
+        background-color: #985f0d;
+    }
+
+    .col-type {
+        width:200px;
+    }
+
+    .col-name {
+        width:230px;
+    }
 }
 </style>
