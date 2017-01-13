@@ -31,9 +31,9 @@ window.vMediaQuery = require('v-media-query');
 Vue.use(vMediaQuery.default);
 
 
-require('json-editor');
-// Set default options
-JSONEditor.defaults.options.theme = 'bootstrap3';
+// require('json-editor');
+// // Set default options
+// JSONEditor.defaults.options.theme = 'bootstrap3';
 
 
 /**

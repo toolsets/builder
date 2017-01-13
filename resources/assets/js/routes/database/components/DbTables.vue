@@ -12,6 +12,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import ListPanel from '../../../layouts/ui/ListPanel.vue'
+import types from '../store/types'
 
 export default {
 
@@ -20,25 +21,22 @@ export default {
     },
 
     computed: {
-        ...mapGetters('database',['getSelectedItem']),
-        ...mapState('database',['list', 'selectedItem', 'selectedIndex']),
+        ...mapGetters( types.DB_NAMESPACE, [ types.GET_SELECTED_ITEM ]),
+        ...mapState( types.DB_NAMESPACE, ['list', 'selectedItem', 'selectedIndex']),
     },
 
     beforeRouteEnter (to, from, next) {
         next(vm => {
-            console.log('beforeRouteEnter', vm.$store);
             if(to.params.key) {
-                vm.$store.dispatch('database/setSelectedItemIndex', to.params.key)
+                vm.$store.dispatch(types.DB_NAMESPACE + '/' + types.SET_SELECTED_ITEM_INDEX, to.params.key)
             } else {
-                vm.$store.dispatch('database/setSelectedItemIndex', null)
+                vm.$store.dispatch(types.DB_NAMESPACE + '/' + types.SET_SELECTED_ITEM_INDEX, null)
             }
         });
     },
 
     methods: {
         createNew() {
-            console.log('updated');
-            console.log('parent: child fired create event');
             this.$router.push({
                 path: '/database/create'
             });
@@ -47,23 +45,22 @@ export default {
         tableSelected(item) {
 
             if(item) {
-                this.$store.dispatch('database/selectedItem', item)
+                this.$store.dispatch(types.DB_NAMESPACE + '/' + types.SELECTED_ITEM, item)
                 this.$router.push({
                     path: '/database/'+ item.table_name
                 });
             } else {
-                vm.$store.dispatch('database/selectedItem', null)
+                vm.$store.dispatch( types.DB_NAMESPACE + '/'  + types.SELECTED_ITEM, null)
             }
         },
 
         fetch() {
-            this.$store.dispatch('database/getTables');
+            this.$store.dispatch(types.DB_NAMESPACE + '/'  + types.GET_TABLES);
         }
     },
 
     mounted() {
         this.fetch();
-        console.log('mounted');
     }
 }
 </script>

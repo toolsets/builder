@@ -23,7 +23,7 @@ const CreateFormComponent = resolve => {
 const EmptyFormComponent = { template: '<div></div>'}
 
 
-import ReduxStore from './store'
+import ReduxStore from './store/store'
 
 export default (store) => {
 

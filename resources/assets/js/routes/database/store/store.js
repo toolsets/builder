@@ -1,4 +1,5 @@
-import api from './api';
+import api from '../api';
+import types from './types';
 
 var tables = [];
 
@@ -16,18 +17,18 @@ export default {
     },
 
     getters: {
-        getSelectedItem(state){
+        [ types.GET_SELECTED_ITEM ] (state){
             return state.selectedItem;
         },
 
-        getTablesList(state) {
+        [ types.GET_TABLES_LIST ] (state) {
             //returns sorted list of list
             return state.tables_list.sort();
         }
     },
 
     mutations: {
-        updateSelectedItem(state, item){
+        [ types.UPDATE_SELECTED_ITEM ] (state, item){
 
             var selectedItem = (item) ? _.cloneDeep(item) : null;
 
@@ -40,12 +41,11 @@ export default {
             }
         },
 
-        updateSelectedItemIndex(state, itemIndex)
-        {
+        [ types.UPDATE_SELECTED_ITEM_INDEX ] (state, itemIndex){
             Vue.set(state, 'selectedIndex', itemIndex);
         },
 
-        receiveTables(state, dbState){
+        [ types.RECEIVE_TABLES ] (state, dbState){
             Vue.set(state, 'tables_list', dbState.tables_list);
             Vue.set(state, 'list', dbState.tables);
             Vue.set(state, 'database', dbState.database);
@@ -66,17 +66,17 @@ export default {
     },
 
     actions: {
-        selectedItem({commit}, item){
+        [ types.SELECTED_ITEM ] ({commit}, item){
 
             commit('updateSelectedItem', item)
         },
 
-        setSelectedItemIndex({commit}, itemIndex)
+        [ types.SET_SELECTED_ITEM_INDEX ] ({commit}, itemIndex)
         {
             commit('updateSelectedItemIndex', itemIndex)
         },
 
-        getTables({commit}) {
+        [ types.GET_TABLES ] ({commit}) {
 
             console.log('calling getAllTables from store');
             api.getAllTables().then(function(response)
