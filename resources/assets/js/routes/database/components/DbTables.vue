@@ -10,7 +10,7 @@
     </list-panel>
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import ListPanel from '../../../layouts/ui/ListPanel.vue'
 import types from '../store/types'
 
@@ -28,9 +28,9 @@ export default {
     beforeRouteEnter (to, from, next) {
         next(vm => {
             if(to.params.key) {
-                vm.$store.dispatch(types.DB_NAMESPACE + '/' + types.SET_SELECTED_ITEM_INDEX, to.params.key)
+                vm.selectedItemIndex(to.params.key);
             } else {
-                vm.$store.dispatch(types.DB_NAMESPACE + '/' + types.SET_SELECTED_ITEM_INDEX, null)
+                vm.selectedItemIndex(null);
             }
         });
     },
@@ -45,18 +45,20 @@ export default {
         tableSelected(item) {
 
             if(item) {
-                this.$store.dispatch(types.DB_NAMESPACE + '/' + types.SELECTED_ITEM, item)
+                this.selectItem(item);
                 this.$router.push({
                     path: '/database/'+ item.table_name
                 });
             } else {
-                vm.$store.dispatch( types.DB_NAMESPACE + '/'  + types.SELECTED_ITEM, null)
+                this.selectItem(null);
             }
         },
 
-        fetch() {
-            this.$store.dispatch(types.DB_NAMESPACE + '/'  + types.GET_TABLES);
-        }
+        ...mapActions(types.DB_NAMESPACE, {
+            fetch: types.GET_TABLES,
+            selectItem: types.SELECTED_ITEM,
+            selectedItemIndex: types.SET_SELECTED_ITEM_INDEX
+        })
     },
 
     mounted() {
