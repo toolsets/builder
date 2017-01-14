@@ -7,6 +7,7 @@ const RECEIVE_TABLES = 'receiveTables';
 const SELECTED_ITEM = 'selectedItem';
 const SET_SELECTED_ITEM_INDEX = 'setSelectedItemIndex';
 const GET_TABLES = 'getTables';
+const GET_TABLES_DATA = 'GET_TABLES_DATA';
 
 export default {
     DB_NAMESPACE,
@@ -17,5 +18,6 @@ export default {
     RECEIVE_TABLES,
     SELECTED_ITEM,
     SET_SELECTED_ITEM_INDEX,
-    GET_TABLES
+    GET_TABLES,
+    GET_TABLES_DATA
 }

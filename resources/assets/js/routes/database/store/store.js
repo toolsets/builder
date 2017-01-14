@@ -24,6 +24,23 @@ export default {
         [ types.GET_TABLES_LIST ] (state) {
             //returns sorted list of list
             return state.tables_list.sort();
+        },
+
+        [ types.GET_TABLES_DATA ] (state) {
+
+            var list = state.list;
+            var dataset = {};
+
+            list.map(function(table)
+            {
+                dataset[table.table_name] = {
+                    columns: Object.keys(table.columns)
+                };
+            });
+
+            console.log('dataset', dataset);
+
+            return dataset;
         }
     },
 
