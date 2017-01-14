@@ -55,6 +55,11 @@ class MigrationReader extends BaseCommand
      */
     public function fire()
     {
+        $migrationRepository = $this->migrator->getRepository();
+        if ($migrationRepository->repositoryExists() == false) {
+            $migrationRepository->createRepository();
+        }
+
         Builder::$snapshot = true;
 
         $this->migrator->runSnapshot($this->getMigrationPaths(), [
