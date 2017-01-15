@@ -6,11 +6,6 @@
             </div>
         </div>
 
-
-        <div class="toolbar">
-            <a class="btn btn-primary" title="Add Column" @click="addColumn" >Add Column</a>
-        </div>
-
         <table class="table table-striped table-responsive">
             <thead>
             <tr>
@@ -34,17 +29,22 @@
                     </select>
                 </td>
                 <td>
-                    <input type='text' class="form-control" v-model="col.length" placeholder="auto" />
+                    <input type='text' class="form-control" v-model="col.length" placeholder="auto" v-bind:disabled="col.functions.length === false"/>
                 </td>
-                <td><input type="checkbox" value="1" v-model="col.nullable" /></td>
-                <td><input type="radio" v-bind:value='col' v-model="primaryKey" /></td>
-                <td><input type='text' class="form-control" v-model="col.default" placeholder="none" /></td>
+                <td><input type="checkbox" value="1" v-model="col.nullable" v-bind:disabled="col.functions.nullable === false"/></td>
+                <td><input type="radio" v-bind:value='col' v-model="primaryKey" v-bind:disabled="col.functions.pk === false"/></td>
+                <td><input type='text' class="form-control" v-model="col.default" placeholder="none" v-bind:disabled="col.functions.default === false" /></td>
                 <td>
                     <button type="button" class="btn btn-default btn-sm" @click='removeColumn(col)'><i class="fa fa-trash"></i> </button>
                 </td>
             </tr>
             </tbody>
         </table>
+
+        <div class="toolbar">
+            <a class="btn btn-primary" title="Add Column" @click="addColumn" >Add Column</a>
+        </div>
+
     </div>
 </template>
 
@@ -97,6 +97,28 @@ const ColumnTypes = [
     "uuid"
 ];
 
+const IncrementColumns = [
+    "bigIncrements",
+    "increments",
+    "mediumIncrements",
+    "smallIncrements"
+];
+
+const AutoUnsignedColumns = [
+    "unsignedBigInteger",
+    "unsignedInteger",
+    "unsignedMediumInteger",
+    "unsignedSmallInteger",
+    "unsignedTinyInteger",
+];
+
+const SpecialColumns = [
+    "morphs",
+    "nullableMorphs",
+    "softDeletes",
+];
+
+const AllColumnsFunctionalyChecked = _.concat([], IncrementColumns, AutoUnsignedColumns, SpecialColumns);
 
 export default {
 
@@ -148,16 +170,74 @@ export default {
                         }
                     }
 
+                    //check for functionalities column types
+                    if (AllColumnsFunctionalyChecked.indexOf(item.type) !== -1 ) {
+
+                        if (IncrementColumns.indexOf(item.type) !== -1) {
+                            item.functions.nullable = false;
+                            item.functions.default = false;
+
+                        } else if (AutoUnsignedColumns.indexOf(item.type) !== -1 ) {
+                            item.functions.nullable = false;
+                            item.functions.default = false;
+
+                        } else if (AutoUnsignedColumns.indexOf(item.type) !== -1 ) {
+                            item.functions.nullable = false;
+                            item.functions.default = false;
+
+                        } else if (SpecialColumns.indexOf(item.type) !== -1 ) {
+                            item.functions.nullable = false
+                            item.functions.pk = false;
+                            item.functions.default = false;
+                            item.functions.length = false;
+                            item.pk = false;
+                            item.length = null;
+                            item.default = null;
+                            item.nullable = false;
+
+                        } else {
+                            item.functions.nullable = true
+                            item.functions.pk = true;
+                            item.functions.default = true;
+                            item.functions.length = true;
+                        }
+                    }
+                    else
+                    {
+                        item.functions.nullable = true
+                        item.functions.pk = true;
+                        item.functions.default = true;
+                        item.functions.length = true;
+                    }
+
                     //check primaryKey
                     if(primaryKeyName !== undefined)
                     {
                         if(item.name === primaryKeyName)
                         {
                             item.pk = true;
+                            item.functions.nullable = false;
+                            item.functions.default = false;
+                            item.default = null;
+                            item.nullable = false;
+                            item.length = null;
+
                         } else {
                             item.pk = false;
+                            item.functions.nullable = true;
+                            item.functions.default = true;
                         }
                     }
+
+                    //check if ends with "_id"
+                    if(_.endsWith(item.name, '_id'))
+                    {
+                        if(item.type === 'string') {
+                            item.type = 'unsignedInteger';
+                        }
+                    }
+
+
 
                     return item;
                 });
@@ -181,6 +261,12 @@ export default {
                 pk: false,
                 default: null,
                 has_error: false,
+                functions: {
+                    nullable: true,
+                    pk: true,
+                    length: true,
+                    default: true
+                }
             };
 
             if(this.columns.length == 0)
@@ -188,6 +274,9 @@ export default {
                 col.name = 'id';
                 col.type = 'increments';
                 col.pk = true;
+                col.functions.nullable = false;
+                col.functions.default = false;
+                col.functions.length = false;
 
                 this.primaryKey = col;
             }

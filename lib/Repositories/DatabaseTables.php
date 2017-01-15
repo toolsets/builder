@@ -11,7 +11,9 @@ namespace Toolkits\LaravelBuilder\Repositories;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Toolkits\LaravelBuilder\Parsers\Yaml;
+use Toolkits\LaravelBuilder\Services\Database\Migration\MigrationCreator;
 
 class DatabaseTables
 {
@@ -95,7 +97,7 @@ class DatabaseTables
     {
         $schema_file = tbl_project_path('database/db_schema.yml');
         if (!Storage::disk('local')->exists($schema_file)) {
-            Artisan::call('builder:read-migrations');
+            tbl_update_snapshot();
         }
 
         $db_connection = config('database.default');
@@ -127,6 +129,62 @@ class DatabaseTables
     protected function normalizeTableData($tables)
     {
         return array_values($tables['tables']);
+    }
+
+    public function createNewTable($data)
+    {
+        //create table definitions
+        $definitions = $this->makeTableDefinitions($data);
+
+        $tableName = $this->getNewTableClassName($definitions['name']);
+
+        /**
+         * @var $creator MigrationCreator
+         */
+        $creator = app('toolsets.migration.creator');
+
+        $path = $this->getMigrationPath();
+
+        $creator->create($tableName, $path, $definitions, true);
+
+        // run database snapshot update
+        tbl_update_snapshot();
+    }
+
+
+    protected function getNewTableClassName($tableName)
+    {
+        $tableName = Str::studly($tableName);
+        return 'TBK_CREATE_TABLE_' . $tableName;
+    }
+
+
+    protected function getMigrationPath()
+    {
+        return tbl_migration_path();
+    }
+
+
+    protected function makeTableDefinitions($data, $create = true)
+    {
+        $table_name = Str::snake($data['name']);
+        $definitions = [];
+        $definitions['name'] = $table_name;
+        $definitions['UP'] = [
+            'columns' => $data['columns'],
+            'relations' => $data['relations'],
+            'indexes' => $data['indexes']
+        ];
+
+        if ($create != true) {
+            $definitions['DOWN'] = [
+                'columns' => $data['columns'],
+                'relations' => $data['relations'],
+                'indexes' => $data['indexes']
+            ];
+        }
+
+        return $definitions;
     }
 
 

@@ -101,6 +101,14 @@ export default {
                 console.log('response', response);
                 commit('receiveTables', response.body)
             });
+        },
+
+        [ types.SUBMIT_NEW_TABLE ] ({dispatch}, payload) {
+
+            api.submitNewTable(payload.table).then(function() {
+
+                dispatch(types.GET_TABLES);
+            });
 
         }
     }

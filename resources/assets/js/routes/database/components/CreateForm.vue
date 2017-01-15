@@ -17,46 +17,32 @@
 
                 <input-columns :columns="form.columns" v-on:columns-updated="updateColumnsList"></input-columns>
                 <input-relations :columns="columnKeys" :tables="getTablesList" :relations="form.relations"></input-relations>
+                <input-indexes :columns="columnKeys" :indexes="form.indexes"></input-indexes>
 
 
+                <div class="action-footer">
+                    <button class="btn btn-primary" @click='submitForm' v-bind:disabled='submittable === false'>Submit</button>
+                    <button class="btn btn-default" @click='cancelForm'>Reset</button>
 
-
-                <div class="builder-form">
-                    <div class="input-title">
-                        <label>Table Indexes</label>
-                    </div>
                 </div>
 
-                <div class="toolbar">
-                    <a class="btn btn-primary" title="Add Index">Add Index</a>
-                </div>
-
-                <table class="table table-striped table-responsive">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Columns</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
 
             </div>
         </div>
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import CreateColumnsForm from './CreateColumnsForm.vue'
 import CreateRelationsForm from './CreateRelationsForm.vue'
+import CreateIndexesForm from './CreateIndexesForm.vue'
 
 export default {
 
     components: {
         'input-columns': CreateColumnsForm,
-        'input-relations': CreateRelationsForm
+        'input-relations': CreateRelationsForm,
+        'input-indexes': CreateIndexesForm
     },
 
     data() {
@@ -67,13 +53,35 @@ export default {
                 columns: [],
                 columnsList: {},
                 relations: [],
-                index: []
+                indexes: []
             },
 
         }
     },
 
     computed: {
+
+        hasDuplicateColumnNames() {
+
+            var Values = _.valuesIn(this.form.columnsList);
+            if(Values.length)
+            {
+                if(_.sum(Values) !== Values.length) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+
+        submittable() {
+            if(this.hasDuplicateColumnNames)
+            {
+                return false;
+            }
+
+            return true;
+        },
 
         showBackButton(){
             if(this.$parent.showLeft == false)
@@ -99,6 +107,32 @@ export default {
 
         updateColumnsList(columnsList) {
             this.form.columnsList = columnsList;
+        },
+
+        ...mapActions('database', {
+            storeSubmit : 'SUBMIT_NEW_TABLE'
+        }),
+
+        submitForm() {
+            console.log('submitForm');
+            this.storeSubmit({
+               table: {
+                   name: this.form.name,
+                   columns: this.form.columns,
+                   relations: this.form.relations,
+                   indexes: this.form.indexes
+               }
+            });
+        },
+
+        cancelForm() {
+            this.form = {
+                name: null,
+                columns: [],
+                columnsList: {},
+                relations: [],
+                indexes: []
+            };
         }
 
     },
@@ -112,15 +146,22 @@ export default {
 .toolbar {
     padding: 8px;
     background-color: #ebeaee;
+    margin-bottom: 20px;
 
     .btn {
         font-size: .8em;
     }
 
 }
+
+.action-footer {
+    margin:8px;
+}
+
 .table {
     font-size: 1em;
     background-color: #FFF;
+    margin-bottom: 0px;
 
     .tbl-status {
         width: 10px;

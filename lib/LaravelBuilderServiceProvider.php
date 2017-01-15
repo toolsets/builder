@@ -20,6 +20,7 @@ use Toolkits\LaravelBuilder\Services\Database\Connection;
 use Toolkits\LaravelBuilder\Services\Database\DbConnectionProvider;
 use Toolkits\LaravelBuilder\Services\Database\Migration\Console\BlueprintWatcher;
 use Toolkits\LaravelBuilder\Services\Database\Migration\Console\MigrationReader;
+use Toolkits\LaravelBuilder\Services\Database\Migration\MigrationCreator;
 use Toolkits\LaravelBuilder\Services\Database\Migration\Migrator;
 
 class LaravelBuilderServiceProvider extends ServiceProvider
@@ -78,18 +79,11 @@ class LaravelBuilderServiceProvider extends ServiceProvider
     {
         $this->registerMigrator();
 
-//        $this->app->when(MigrateCommand::class)
-//            ->needs('Illuminate\Database\Migrations\Migrator')
-//            ->give(function($app)
-//            {
-//                $repository = $app['migration.repository'];
-//                return new Migrator($repository, $app['db'], $app['files']);
-//            });
-//
+        $this->app->bind('toolsets.migration.creator', MigrationCreator::class);
+
         $this->app->when(MigrationReader::class)
             ->needs('Illuminate\Database\Migrations\Migrator')
-            ->give(function($app)
-            {
+            ->give(function ($app) {
                 $repository = $app['migration.repository'];
                 return new Migrator($repository, $app['db'], $app['files']);
             });

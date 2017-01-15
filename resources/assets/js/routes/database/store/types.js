@@ -8,6 +8,8 @@ const SELECTED_ITEM = 'selectedItem';
 const SET_SELECTED_ITEM_INDEX = 'setSelectedItemIndex';
 const GET_TABLES = 'getTables';
 const GET_TABLES_DATA = 'GET_TABLES_DATA';
+const SUBMIT_NEW_TABLE = 'SUBMIT_NEW_TABLE';
+const RECEIVE_NEW_TABLE = 'RECEIVE_NEW_TABLE';
 
 export default {
     DB_NAMESPACE,
@@ -19,5 +21,6 @@ export default {
     SELECTED_ITEM,
     SET_SELECTED_ITEM_INDEX,
     GET_TABLES,
-    GET_TABLES_DATA
+    GET_TABLES_DATA,
+    SUBMIT_NEW_TABLE
 }

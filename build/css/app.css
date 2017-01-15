@@ -10847,7 +10847,7 @@ html, body, #app {
   font-weight: normal;
   font-style: normal;
   font-smooth: always;
-  padding: 16px;
+  padding: 8px;
   background-color: #2e6da4;
 }
 
@@ -10856,7 +10856,7 @@ html, body, #app {
   font-weight: normal !important;
 }
 
-.table-form .builder-form .input-title div.form-control {
+.table-form .builder-form .input-title .form-control {
   font-size: 1.2em;
   color: #FFFFFF;
   background-color: transparent;

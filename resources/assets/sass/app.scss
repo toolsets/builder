@@ -134,7 +134,7 @@ html, body, #app {
     font-weight: normal;
     font-style: normal;
     font-smooth: always;
-    padding: 16px;
+    padding: 8px;
     background-color: #2e6da4;
 
     .input-title {
@@ -144,7 +144,7 @@ html, body, #app {
         font-weight: normal !important;
       }
 
-      div.form-control {
+      .form-control {
         font-size: 1.2em;
         color: #FFFFFF;
         background-color: transparent;

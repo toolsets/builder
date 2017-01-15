@@ -1,6 +1,8 @@
 <?php
 
 
+use Illuminate\Support\Facades\Artisan;
+
 if (! function_exists('app'))
 {
     /**
@@ -70,5 +72,34 @@ if (! function_exists('tbl_project_path')) {
     function tbl_project_path($path = '')
     {
         return 'toolsets/builder' .($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+}
+
+
+if (! function_exists('tbl_migration_path')) {
+    /**
+     * Get the path to the storage folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function tbl_migration_path($path = '')
+    {
+        $internal_path = DIRECTORY_SEPARATOR . 'database'. DIRECTORY_SEPARATOR .'migrations';
+        return  app()->basePath() . $internal_path .($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+}
+
+
+if (! function_exists('tbl_update_snapshot')) {
+    /**
+     * Get the path to the storage folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function tbl_update_snapshot()
+    {
+        Artisan::call('builder:read-migrations');
     }
 }

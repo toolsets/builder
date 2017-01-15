@@ -31,6 +31,7 @@
         "illuminate/support": "^5.3",
         "illuminate/routing": "^5.3",
         "illuminate/container": "^5.3",
-        "Illuminate/Database": "^5.3"
+        "Illuminate/Database": "^5.3",
+        "Illuminate/Filesystem": "^5.3"
     }
 }

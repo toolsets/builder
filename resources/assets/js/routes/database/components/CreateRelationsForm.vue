@@ -7,10 +7,6 @@
             {{ columnKeys }}
         </div>
 
-        <div class="toolbar">
-            <a class="btn btn-primary" title="Add Relation" @click='addRelation'>Add Relation</a>
-        </div>
-
         <table class="table table-striped table-responsive">
             <thead>
             <tr>
@@ -39,7 +35,9 @@
                         </select>
                     </td>
                     <td>
-                        <span v-if="!row.fk_table">set FK Table</span>
+                        <select v-if="!row.fk_table" v-model="row.fk_column" disabled="disabled" class="form-control">
+                            <option value="null"></option>
+                        </select>
                         <select v-model="row.fk_column" class="form-control" v-if="row.fk_table">
                             <option   v-for="option in table_data[row.fk_table].columns" v-bind:value="option">
                                 {{ option }}
@@ -68,6 +66,11 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="toolbar">
+            <a class="btn btn-primary" title="Add Relation" @click='addRelation'>Add Relation</a>
+        </div>
+
     </div>
 </template>
 <script>
@@ -87,12 +90,6 @@ export default {
         tables: {
             type: Array,
             required: true
-        }
-    },
-
-    data() {
-        return {
-            unique_relations: {}
         }
     },
 
