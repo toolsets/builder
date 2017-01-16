@@ -158,22 +158,18 @@ class MigrationSnapshot
     {
 
         //check if  migrated, column needs to be relocated after a field
-        if(static::$migrated) {
-
-            $columns = $blueprint->getColumns();
-
-
-            foreach ($columns as $column) {
-
-                if (isset($column->after)) {
-                    $afterColumn = $column->after;
-                    if ($afterColumn !== $column->name) {
-
-                    }
-                }
-
-            }
-        }
+        // TODO
+//        $columns = $blueprint->getColumns();
+//
+//        foreach ($columns as $column) {
+//
+//            if (isset($column->after)) {
+//                $afterColumn = $column->after;
+//                if ($afterColumn !== $column->name) {
+//
+//                }
+//            }
+//        }
 
         foreach ($blueprint->getColumns() as $column) {
             foreach (['primary', 'unique', 'index'] as $index) {
