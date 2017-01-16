@@ -43,6 +43,8 @@
 
         <div class="toolbar">
             <a class="btn btn-primary" title="Add Column" @click="addColumn" >Add Column</a>
+            <a class="btn btn-default" title="Add Timestamps" @click="addTimestamps" >Add Timestamps</a>
+            <a class="btn btn-default" title="Add TimestampsTz" @click="addTimestampsTz" >Add TimestampsTz</a>
         </div>
 
     </div>
@@ -79,7 +81,6 @@ const ColumnTypes = [
     "rememberToken",
     "smallIncrements",
     "smallInteger",
-    "softDeletes",
     "string",
     "text",
     "time",
@@ -87,8 +88,6 @@ const ColumnTypes = [
     "tinyInteger",
     "timestamp",
     "timestampTz",
-    "timestamps",
-    "timestampsTz",
     "unsignedBigInteger",
     "unsignedInteger",
     "unsignedMediumInteger",
@@ -114,9 +113,9 @@ const AutoUnsignedColumns = [
 
 const SpecialColumns = [
     "morphs",
-    "nullableMorphs",
-    "softDeletes",
+    "nullableMorphs"
 ];
+
 
 const AllColumnsFunctionalyChecked = _.concat([], IncrementColumns, AutoUnsignedColumns, SpecialColumns);
 
@@ -170,22 +169,31 @@ export default {
                         }
                     }
 
+                    var defaultFunctions = Object.assign({}, item.functions);
+
+
                     //check for functionalities column types
                     if (AllColumnsFunctionalyChecked.indexOf(item.type) !== -1 ) {
 
+
+
                         if (IncrementColumns.indexOf(item.type) !== -1) {
+
                             item.functions.nullable = false;
                             item.functions.default = false;
 
                         } else if (AutoUnsignedColumns.indexOf(item.type) !== -1 ) {
+
                             item.functions.nullable = false;
                             item.functions.default = false;
 
                         } else if (AutoUnsignedColumns.indexOf(item.type) !== -1 ) {
+
                             item.functions.nullable = false;
                             item.functions.default = false;
 
                         } else if (SpecialColumns.indexOf(item.type) !== -1 ) {
+
                             item.functions.nullable = false
                             item.functions.pk = false;
                             item.functions.default = false;
@@ -196,18 +204,13 @@ export default {
                             item.nullable = false;
 
                         } else {
-                            item.functions.nullable = true
-                            item.functions.pk = true;
-                            item.functions.default = true;
-                            item.functions.length = true;
+
+                            item.functions = defaultFunctions;
                         }
                     }
                     else
                     {
-                        item.functions.nullable = true
-                        item.functions.pk = true;
-                        item.functions.default = true;
-                        item.functions.length = true;
+                        item.functions = defaultFunctions;
                     }
 
                     //check primaryKey
@@ -224,8 +227,7 @@ export default {
 
                         } else {
                             item.pk = false;
-                            item.functions.nullable = true;
-                            item.functions.default = true;
+                            item.functions = defaultFunctions;
                         }
                     }
 
@@ -236,8 +238,6 @@ export default {
                             item.type = 'unsignedInteger';
                         }
                     }
-
-
 
                     return item;
                 });
@@ -283,6 +283,59 @@ export default {
 
 
             this.columns.push(col);
+        },
+
+        addTimestamps() {
+
+            ['created_at', 'updated_at'].map(function(name){
+                if(this.listOfColumns[name] === undefined) {
+                    var col = {
+                        name: null,
+                        type: 'timestamp',
+                        length: null,
+                        nullable: true,
+                        pk: false,
+                        default: null,
+                        has_error: false,
+                        functions: {}
+                    };
+
+                    col.name = name;
+                    col.functions = {
+                                        nullable: false,
+                                        pk: true,
+                                        length: false,
+                                        default: false
+                                    };
+                    this.columns.push(col);
+                }
+            }.bind(this));
+        },
+
+        addTimestampsTz() {
+            ['created_at', 'updated_at'].map(function(name){
+                if(this.listOfColumns[name] === undefined) {
+                    var col = {
+                        name: null,
+                        type: 'timestampTz',
+                        length: null,
+                        nullable: true,
+                        pk: false,
+                        default: null,
+                        has_error: false,
+                        functions: {}
+                    };
+
+                    col.name = name;
+                    col.functions = {
+                                        nullable: false,
+                                        pk: true,
+                                        length: false,
+                                        default: false
+                                    };
+                    this.columns.push(col);
+                }
+            }.bind(this));
         },
 
         hasColumnError(col) {

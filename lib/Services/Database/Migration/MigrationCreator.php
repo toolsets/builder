@@ -184,14 +184,48 @@ class MigrationCreator
         return $this->files;
     }
 
+
+
+
     protected function populateTableColumnsForUp($stub, $data)
     {
-        $columnsOutput = '';
+
         $relationsOutput = '';
         $indexesOutput = '';
         $primaryKeyColumn = null;
         $tabSpace = '    ';
         $threeTabs = $tabSpace . $tabSpace . $tabSpace;
+
+        $columnsOutput = $this->makeNewColumns($stub, $data, $threeTabs);
+
+        $relationsOutput = $this->makeNewRelations($stub, $data, $threeTabs);
+
+        //indexes
+        if (!empty($data['indexes'])) {
+            $output = '';
+            foreach ($data['indexes'] as $indexCol) {
+                $columns = $indexCol['columns'];
+                $type = $indexCol['type'];
+                $columnsFormat = "['". implode("','", $columns) ."']";
+
+                $template = "\$table->%s(%s);\n";
+                $output =  sprintf($template, $type, $columnsFormat);
+
+                $indexesOutput .= $threeTabs . $output;
+            }
+
+            $indexesOutput .= "\n\r";
+        }
+
+        $finalOutput = $columnsOutput  . $relationsOutput  . "\n\r" . $indexesOutput;
+
+        return str_replace('{TABLE_DEFINITIONS_UP}', $finalOutput, $stub);
+    }
+
+
+    protected function makeNewColumns($stub, $data, $spacing)
+    {
+        $columnsOutput = '';
 
         foreach ($data['columns'] as $col) {
             $length = $col['length'];
@@ -203,7 +237,7 @@ class MigrationCreator
 
 
             if (!empty($length)) {
-                $template = "\$table->%s('%s', '%s')";
+
                 if ($type == 'enum') {
                     $length = explode(',', $length);
                     $length = array_map(function ($item) {
@@ -228,17 +262,28 @@ class MigrationCreator
             }
 
             if ($pkIndex === true) {
-                $primaryKeyColumn = $column;
                 $tableString .= sprintf('->primary()');
             }
 
             $tableString .= ";\n";
 
-            $columnsOutput .= $threeTabs . $tableString;
+            $columnsOutput .= $spacing . $tableString;
         }
 
+        $columnsOutput .= "\n\r";
 
+        return $columnsOutput;
+    }
+
+    protected function populateTableColumnsForDown($stub, $data)
+    {
+        return str_replace('{TABLE_DEFINITIONS_DOWN}', '//', $stub);
+    }
+
+    public function makeNewRelations($stub, $data, $spacing)
+    {
         //releations
+        $relationsOutput = '';
         if (!empty($data['relations'])) {
             foreach ($data['relations'] as $relation) {
                 $column = $relation['column'];
@@ -249,21 +294,20 @@ class MigrationCreator
 
                 $template = "\$table->foreign('%s')->references('%s')->on('%s')";
 
-
                 $output = sprintf($template, $column, $fk_column, $fk_table);
 
                 if ($on_update != 'none') {
                     switch ($on_update) {
                         case 'set_null':
-                            $output .= "->onUpdate('SET NULL')";
+                            $output .= "->onUpdate('set null')";
                             break;
 
                         case 'cascade':
-                            $output .= "->onUpdate('CASCADE')";
+                            $output .= "->onUpdate('cascade')";
                             break;
 
                         case 'restrict':
-                            $output .= "->onUpdate('RESTRICT')";
+                            $output .= "->onUpdate('restrict')";
                             break;
                     }
                 }
@@ -286,35 +330,13 @@ class MigrationCreator
 
                 $output .= ";\n";
 
-                $relationsOutput .= $threeTabs . $output;
+                $relationsOutput .= $spacing . $output;
 
             }
+
+            $relationsOutput .= "\n\r";
         }
 
-        //indexes
-        if (!empty($data['indexes'])) {
-             $output = '';
-            foreach ($data['indexes'] as $indexCol) {
-                $columns = $indexCol['columns'];
-                $type = $indexCol['type'];
-                $columnsFormat = "['". implode("','", $columns) ."']";
-
-                $template = "\$table->%s(%s);\n";
-                $output =  sprintf($template, $type, $columnsFormat);
-
-                $indexesOutput .= $threeTabs . $output;
-            }
-
-
-        }
-
-        $finalOutput = $columnsOutput . "\n\r" . $relationsOutput  . "\n\r" . $indexesOutput;
-
-        return str_replace('{TABLE_DEFINITIONS_UP}', $finalOutput, $stub);
-    }
-
-    protected function populateTableColumnsForDown($stub, $data)
-    {
-        return str_replace('{TABLE_DEFINITIONS_DOWN}', '//', $stub);
+        return $relationsOutput;
     }
 }

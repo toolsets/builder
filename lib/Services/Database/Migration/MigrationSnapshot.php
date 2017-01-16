@@ -217,9 +217,7 @@ class MigrationSnapshot
     {
         if (is_array($value)) {
 
-            $str = implode(',', $value);
-
-            return '['. $str .']';
+            return implode(', ', $value);
         }
 
         if (is_bool($value)) {
