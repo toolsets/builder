@@ -28,9 +28,7 @@ class SQLiteConnection extends LaravelSQLiteConnection
             $this->useDefaultSchemaGrammar();
         }
 
-        $builder =  new Builder($this);
-
-        return $builder;
+        return new Builder($this);
     }
 
 }

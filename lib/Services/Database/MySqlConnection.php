@@ -10,8 +10,6 @@ namespace Toolkits\LaravelBuilder\Services\Database;
 
 
 use Illuminate\Database\MySqlConnection as LaravelMySqlConnection;
-use Toolkits\LaravelBuilder\Services\Database\Schema\Builder;
-use Toolkits\LaravelBuilder\Services\Database\Schema\Grammars\MySqlGrammar;
 use Toolkits\LaravelBuilder\Services\Database\Schema\MySqlBuilder;
 use Toolkits\LaravelBuilder\Services\Database\Schema\SnapshotBlueprint;
 
@@ -30,9 +28,6 @@ class MySqlConnection extends LaravelMySqlConnection
             $this->useDefaultSchemaGrammar();
         }
 
-        $builder =  new MySqlBuilder($this);
-
-        return $builder;
-
+        return new MySqlBuilder($this);
     }
 }

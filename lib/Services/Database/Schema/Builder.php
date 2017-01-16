@@ -18,6 +18,8 @@ class Builder extends SchemaBuilder
 
     public static $snapshot = false;
 
+    public $sToolset = true;
+
 
     protected function build(Blueprint $blueprint)
     {

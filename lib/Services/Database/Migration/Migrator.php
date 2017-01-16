@@ -12,10 +12,10 @@ namespace Toolkits\LaravelBuilder\Services\Database\Migration;
 use Illuminate\Database\Migrations\Migrator as LaravelMigrator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
-use Toolkits\LaravelBuilder\Services\Database\Schema\Builder;
 
 class Migrator extends LaravelMigrator
 {
+    public $is_toolset = true;
 
     /**
      * Run the outstanding migrations at a given path.
@@ -30,9 +30,6 @@ class Migrator extends LaravelMigrator
 
         $files = $this->getMigrationFiles($paths);
 
-//        // Once we grab all of the migration files for the path, we will compare them
-//        // against the migrations that have already been run for this package then
-//        // run each of the outstanding migrations against a database connection.
         $ran = $this->repository->getRan();
 
         $migrations_ran = Collection::make($files)
@@ -42,20 +39,16 @@ class Migrator extends LaravelMigrator
             })->values()->all();;
 
         MigrationSnapshot::$migrated = true;
+
         $this->requireFiles($migrations_ran);
-        $this->runMigrationList($migrations_ran, $options);
+        $this->runPending($migrations_ran, $options);
+
         MigrationSnapshot::$migrated = false;
 
-//
-        $migrations = Collection::make($files)
-            ->reject(function ($file) use ($ran) {
-                return in_array($this->getMigrationName($file), $ran);
-            })->values()->all();
-
+        $migrations = $this->pendingMigrations($files, $ran);
 
         $this->requireFiles($migrations);
-
-        $this->runMigrationList($migrations, $options);
+        $this->runPending($migrations, $options);
 
         return $migrations;
     }

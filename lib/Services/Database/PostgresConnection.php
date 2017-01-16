@@ -26,12 +26,9 @@ class PostgresConnection extends LaravelPostgresConnection
     public function getSchemaBuilder()
     {
         if (is_null($this->schemaGrammar)) {
-                $this->useDefaultSchemaGrammar();
-
+            $this->useDefaultSchemaGrammar();
         }
 
-        $builder = new PostgresBuilder($this);
-
-        return $builder;
+        return new PostgresBuilder($this);
     }
 }

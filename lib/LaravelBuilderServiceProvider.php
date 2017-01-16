@@ -107,13 +107,13 @@ class LaravelBuilderServiceProvider extends ServiceProvider
         // The migrator is responsible for actually running and rollback the migration
         // files in the application. We'll pass in our database connection resolver
         // so the migrator can resolve any of these connections when it needs to.
-        $this->app->afterResolving(function(DatabaseMigrationRepository $repo)
-        {
-            $this->app->singleton('migrator', function ($app) use($repo) {
 
+        $this->app->afterResolving('migration.repository', function($repo){
+            $this->app->singleton('migrator', function ($app) use($repo) {
                 return new Migrator($repo, $app['db'], $app['files']);
             });
         });
+
 
     }
 
