@@ -329,6 +329,14 @@ class MigrationSnapshot
         {
             switch ($command->name)
             {
+                case 'dropColumn':
+                    $dropCols = $command->columns;
+                    foreach($dropCols as $dCol) {
+                        if (isset($columns[$dCol])) {
+                            unset($columns[$dCol]);
+                        }
+                    }
+                    break;
                 case 'dropForeign':
                     $relations = $table_state['relations'];
                     $index = $command->index;
