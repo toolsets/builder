@@ -155,7 +155,7 @@ class DatabaseTables
     protected function getNewTableClassName($tableName)
     {
         $tableName = Str::studly($tableName);
-        return 'TBK_CREATE_TABLE_' . $tableName;
+        return 'TBK_CREATE_' . $tableName . '_TABLE';
     }
 
 
