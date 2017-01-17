@@ -6,12 +6,12 @@
  * Time: 7:33 PM
  */
 
-namespace Toolkits\LaravelBuilder\Services\Database;
+namespace Toolsets\LaravelBuilder\Services\Database;
 
 
 use Illuminate\Database\SqlServerConnection as LaravelSqlServerConnection;
-use Toolkits\LaravelBuilder\Services\Database\Migration\Builder;
-use Toolkits\LaravelBuilder\Services\Database\Schema\Grammars\SqlServerGrammar;
+use Toolsets\LaravelBuilder\Services\Database\Migration\Builder;
+use Toolsets\LaravelBuilder\Services\Database\Schema\Grammars\SqlServerGrammar;
 
 
 class SqlServerConnection extends LaravelSqlServerConnection

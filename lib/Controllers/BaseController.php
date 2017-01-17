@@ -6,7 +6,7 @@
  * Time: 9:37 PM
  */
 
-namespace Toolkits\LaravelBuilder\Controllers;
+namespace Toolsets\LaravelBuilder\Controllers;
 
 use Illuminate\Routing\Controller;
 

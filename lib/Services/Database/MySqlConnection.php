@@ -6,12 +6,12 @@
  * Time: 7:33 PM
  */
 
-namespace Toolkits\LaravelBuilder\Services\Database;
+namespace Toolsets\LaravelBuilder\Services\Database;
 
 
 use Illuminate\Database\MySqlConnection as LaravelMySqlConnection;
-use Toolkits\LaravelBuilder\Services\Database\Schema\MySqlBuilder;
-use Toolkits\LaravelBuilder\Services\Database\Schema\SnapshotBlueprint;
+use Toolsets\LaravelBuilder\Services\Database\Schema\MySqlBuilder;
+use Toolsets\LaravelBuilder\Services\Database\Schema\SnapshotBlueprint;
 
 
 class MySqlConnection extends LaravelMySqlConnection

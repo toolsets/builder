@@ -6,7 +6,7 @@
  * Time: 7:57 PM
  */
 
-namespace Toolkits\LaravelBuilder;
+namespace Toolsets\LaravelBuilder;
 
 use Closure;
 use Illuminate\Database\Console\Migrations\MigrateCommand;
@@ -15,13 +15,13 @@ use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Toolkits\LaravelBuilder\Console\MakeCommand;
-use Toolkits\LaravelBuilder\Services\Database\Connection;
-use Toolkits\LaravelBuilder\Services\Database\DbConnectionProvider;
-use Toolkits\LaravelBuilder\Services\Database\Migration\Console\BlueprintWatcher;
-use Toolkits\LaravelBuilder\Services\Database\Migration\Console\MigrationReader;
-use Toolkits\LaravelBuilder\Services\Database\Migration\MigrationCreator;
-use Toolkits\LaravelBuilder\Services\Database\Migration\Migrator;
+use Toolsets\LaravelBuilder\Console\MakeCommand;
+use Toolsets\LaravelBuilder\Services\Database\Connection;
+use Toolsets\LaravelBuilder\Services\Database\DbConnectionProvider;
+use Toolsets\LaravelBuilder\Services\Database\Migration\Console\BlueprintWatcher;
+use Toolsets\LaravelBuilder\Services\Database\Migration\Console\MigrationReader;
+use Toolsets\LaravelBuilder\Services\Database\Migration\MigrationCreator;
+use Toolsets\LaravelBuilder\Services\Database\Migration\Migrator;
 
 class LaravelBuilderServiceProvider extends ServiceProvider
 {
@@ -30,7 +30,7 @@ class LaravelBuilderServiceProvider extends ServiceProvider
 
     protected $config_name = 'builder';
 
-    protected $namespace = 'Toolkits\LaravelBuilder\Controllers';
+    protected $namespace = 'Toolsets\LaravelBuilder\Controllers';
 
 
     public function boot()

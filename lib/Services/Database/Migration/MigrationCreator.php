@@ -6,7 +6,7 @@
  * Time: 3:39 PM
  */
 
-namespace Toolkits\LaravelBuilder\Services\Database\Migration;
+namespace Toolsets\LaravelBuilder\Services\Database\Migration;
 
 
 use Illuminate\Filesystem\Filesystem;

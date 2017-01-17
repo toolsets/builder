@@ -6,7 +6,7 @@
  * Time: 2:42 AM
  */
 
-namespace Toolkits\LaravelBuilder\Console;
+namespace Toolsets\LaravelBuilder\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;

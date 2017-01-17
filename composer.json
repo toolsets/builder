@@ -1,5 +1,5 @@
 {
-    "name": "toolkits/laravel-builder",
+    "name": "toolsets/laravel-builder",
     "description": "Application builder for Laravel",
     "type": "library",
     "license": "MIT",
@@ -12,7 +12,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Toolkits\\LaravelBuilder\\": "lib/"
+            "Toolsets\\LaravelBuilder\\": "lib/"
         }
     },
     "autoload-dev": {

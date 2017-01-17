@@ -6,7 +6,7 @@
  * Time: 1:19 PM
  */
 
-namespace Toolkits\LaravelBuilder\Services\Database\Schema;
+namespace Toolsets\LaravelBuilder\Services\Database\Schema;
 
 
 class PostgresBuilder extends Builder

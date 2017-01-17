@@ -6,12 +6,12 @@
  * Time: 1:17 PM
  */
 
-namespace Toolkits\LaravelBuilder\Services\Database\Schema;
+namespace Toolsets\LaravelBuilder\Services\Database\Schema;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 use Illuminate\Support\Facades\Artisan;
-use Toolkits\LaravelBuilder\Services\Database\Migration\MigrationSnapshot;
+use Toolsets\LaravelBuilder\Services\Database\Migration\MigrationSnapshot;
 
 class Builder extends SchemaBuilder
 {

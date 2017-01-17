@@ -6,7 +6,7 @@
  * Time: 7:19 PM
  */
 
-namespace Toolkits\LaravelBuilder\Services\Database;
+namespace Toolsets\LaravelBuilder\Services\Database;
 
 
 use Illuminate\Database\Connection;
