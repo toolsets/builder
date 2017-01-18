@@ -20,6 +20,13 @@ const CreateFormComponent = resolve => {
     })
 }
 
+
+const TableUpdateForm = resolve => {
+    require.ensure(['./components/UpdateForm.vue'], () => {
+        resolve(require('./components/UpdateForm.vue'))
+    })
+}
+
 const EmptyFormComponent = { template: '<div></div>'}
 
 
@@ -66,7 +73,18 @@ export default (store) => {
                 components: {
                     list: DbTables,
                     form: TableForm
-                }
+                },
+
+                children : [
+                    {
+                        path: 'update',
+                        components: {
+                            list: DbTables,
+                            form: TableForm,
+                            update_form: TableUpdateForm
+                        }
+                    }
+                ]
             }
 
         ]

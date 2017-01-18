@@ -214,10 +214,10 @@ class MigrationCreator
                 $indexesOutput .= $threeTabs . $output;
             }
 
-            $indexesOutput .= "\n\r";
+            $indexesOutput .= "\n";
         }
 
-        $finalOutput = $columnsOutput  . $relationsOutput  . "\n\r" . $indexesOutput;
+        $finalOutput = $columnsOutput  . $relationsOutput  . $indexesOutput;
 
         return str_replace('{TABLE_DEFINITIONS_UP}', $finalOutput, $stub);
     }
@@ -270,7 +270,7 @@ class MigrationCreator
             $columnsOutput .= $spacing . $tableString;
         }
 
-        $columnsOutput .= "\n\r";
+        $columnsOutput .= "\n";
 
         return $columnsOutput;
     }
@@ -334,7 +334,7 @@ class MigrationCreator
 
             }
 
-            $relationsOutput .= "\n\r";
+            $relationsOutput .= "\n";
         }
 
         return $relationsOutput;

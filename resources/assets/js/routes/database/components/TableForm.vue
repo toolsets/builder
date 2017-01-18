@@ -2,6 +2,7 @@
     <div v-if="selectedItem" class="table-form">
 
         <div class="list-panel">
+
             <div class="table-section">
                 <div class="title-header">
                     Table Configuration
@@ -36,8 +37,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="col in selectedItem.columns">
-                        <td v-bind:class="{ migrated: col.migrated == true, 'not-migrated': col.migrated == false}" class="tbl-status"></td>
+                    <tr v-if="selectedItem.hasEnumColumns">
+                        <td colspan="9" class="warning">
+                            <p>Warning: Renaming any column in a table that also has a column of type enum is not currently supported by Laravel.</p>
+                        </td>
+                    </tr>
+                    <tr v-for="col in selectedItem.columns" v-bind:class="{ 'drop-column': col.drop }">
+                        <td v-bind:class="{migrated: col.migrated == true, 'not-migrated': col.migrated == false}" class="tbl-status"></td>
                         <td>{{ col.attributes.name }}</td>
                         <td>{{ col.attributes.type }}</td>
                         <td>{{ col.attributes.length }}</td>
@@ -60,6 +66,7 @@
                 <table class="table table-striped table-responsive">
                     <thead>
                     <tr>
+                        <th class="tbl-status"></th>
                         <th>Name</th>
                         <th>Columns</th>
                         <th>FK Table</th>
@@ -69,7 +76,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="fk in selectedItem.relations">
+                    <tr v-for="fk in selectedItem.relations" v-bind:class="{ 'drop-column': fk.drop }">
+                        <td v-bind:class="{ migrated: fk.migrated == true, 'not-migrated': fk.migrated == false}" class="tbl-status"></td>
                         <td>{{ fk.index }}</td>
                         <td>{{ fk.columns }}</td>
                         <td>{{ fk.fk_table }}</td>
@@ -89,18 +97,22 @@
                 <table class="table table-striped table-responsive">
                     <thead>
                     <tr>
+                        <th class="tbl-status"></th>
                         <th>Name</th>
                         <th>Columns</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="indx in selectedItem.indexes">
+                    <tr v-for="indx in selectedItem.indexes" v-bind:class="{ 'drop-column': indx.drop }">
+                        <td v-bind:class="{ migrated: indx.migrated == true, 'not-migrated': indx.migrated == false}" class="tbl-status"></td>
                         <td>{{ indx.index }}</td>
                         <td>{{ indx.columns }}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+
+            <router-view  name="update_form"></router-view>
         </div>
 </template>
 <script>
@@ -112,7 +124,7 @@ export default {
     data() {
 
         return {
-            formData : {}
+            formData : {},
         }
     },
 
@@ -120,13 +132,13 @@ export default {
     computed: {
 
         showBackButton(){
-          if(this.$parent.showLeft == false)
-          {
+          if(this.$parent.showLeft == false) {
               return true;
           }
 
           return false;
         },
+
 
         ...mapState('database',['selectedItem', 'selectedIndex']),
     },
@@ -137,12 +149,14 @@ export default {
         goBack() {
             this.$router.push({ path: '/database' })
         }
+
     },
 
 
     mounted() {
         console.log('Table Form Component mounted.')
         console.log(this.$store.state);
+
         //this.listenOnBus('database.table.selected',  this.updateFormData);
     }
 }
@@ -172,6 +186,21 @@ export default {
 
     td.not-migrated {
         background-color: #985f0d;
+    }
+
+    tr.drop-column {
+        td.migrated {
+            background-color: #cc1214;
+        }
+
+        td.not-migrated {
+            background-color: #cc1214;
+        }
+
+        td {
+            color: #cc1214;
+            text-decoration: line-through;
+        }
     }
 }
 </style>

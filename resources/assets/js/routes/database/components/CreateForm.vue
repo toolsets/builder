@@ -122,7 +122,11 @@ export default {
                    relations: this.form.relations,
                    indexes: this.form.indexes
                }
-            });
+            }).then(function(response) {
+                if(response.ok) {
+                    this.$router.push({ path: '/database/' + this.form.name });
+                }
+            }.bind(this));
         },
 
         cancelForm() {

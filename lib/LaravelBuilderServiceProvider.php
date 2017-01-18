@@ -35,7 +35,6 @@ class LaravelBuilderServiceProvider extends ServiceProvider
 
     public function boot()
     {
-
         define('_TLB_PKG_NAME_', $this->package_name);
         require __DIR__ . '/helpers.php';
 

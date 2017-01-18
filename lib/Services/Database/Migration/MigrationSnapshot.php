@@ -329,7 +329,13 @@ class MigrationSnapshot
                     $dropCols = $command->columns;
                     foreach($dropCols as $dCol) {
                         if (isset($columns[$dCol])) {
-                            unset($columns[$dCol]);
+
+                            if($columns[$dCol]['migrated'] == static::$migrated) {
+                                unset($columns[$dCol]);
+                            }else {
+                                $columns[$dCol]['drop'] = true;
+                                $columns[$dCol]['migrated'] = static::$migrated;
+                            }
                         }
                     }
                     break;
@@ -339,6 +345,9 @@ class MigrationSnapshot
                     if (isset($relations[$index])) {
                         if ($relations[$index]['migrated'] == static::$migrated) {
                             unset($relations[$index]);
+                            $table_state['relations'] = $relations;
+                        } else {
+                            $relations[$index]['drop'] = true;
                             $table_state['relations'] = $relations;
                         }
                     }

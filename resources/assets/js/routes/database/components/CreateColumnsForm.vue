@@ -19,6 +19,11 @@
             </tr>
             </thead>
             <tbody>
+            <tr v-if="hasEnumType">
+                <td colspan="7" class="warning">
+                    <p>Warning: Renaming any column in a table that also has a column of type enum is not currently supported by Laravel.</p>
+                </td>
+            </tr>
             <tr v-for="(col, index) in columns">
                 <td v-bind:class="{'has-error': col.has_error == true}"><input type='text' class="form-control" v-model="col.name"  /></td>
                 <td >
@@ -29,7 +34,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type='text' class="form-control" v-model="col.length" placeholder="auto" v-bind:disabled="col.functions.length === false"/>
+                    <input type='text' class="form-control" v-model="col.length" v-bind:placeholder="col.placeholder" v-bind:disabled="col.functions.length === false"/>
                 </td>
                 <td><input type="checkbox" value="1" v-model="col.nullable" v-bind:disabled="col.functions.nullable === false"/></td>
                 <td><input type="radio" v-bind:value='col' v-model="primaryKey" v-bind:disabled="col.functions.pk === false"/></td>
@@ -132,6 +137,7 @@ export default {
         return {
             columnTypes: ColumnTypes,
             primaryKey: null,
+            hasEnumType: false
         }
     },
 
@@ -153,7 +159,34 @@ export default {
             if(this.columns.length > 0) {
                 var primaryKeyName = this.primaryColumnName;
 
+                this.hasEnumType = false;
+
                 this.columns.map(function(item) {
+
+                    var defaultFunctions = Object.assign({}, item.functions);
+                    var originalCopy = Object.assign({}, item);
+
+                    //check for ENUM col type
+                    if(item.type === 'enum') {
+                        this.hasEnumType = true;
+                        item.placeholder = 'Foo, Bar';
+                        item.placeholderOrigin = originalCopy.placeholder;
+
+                        if(item.default == null) {
+                            item.nullable = true;
+                        }
+                    } else {
+
+                        if(item.placeholderOrigin !== undefined) {
+                            if(item.placeholder == 'Foo, Bar') {
+                                item.placeholder = 'auto';
+                            } else {
+                                item.placeholder = item.placeholderOrigin;
+                            }
+
+                            _.unset(item, 'placeholderOrigin');
+                        }
+                    }
 
                     if(item.name) {
                         //trim name
@@ -169,7 +202,7 @@ export default {
                         }
                     }
 
-                    var defaultFunctions = Object.assign({}, item.functions);
+
 
 
                     //check for functionalities column types
@@ -240,7 +273,7 @@ export default {
                     }
 
                     return item;
-                });
+                }.bind(this));
 
                 this.$emit('columns-updated', list);
             }
@@ -261,6 +294,7 @@ export default {
                 pk: false,
                 default: null,
                 has_error: false,
+                placeholder: 'auto',
                 functions: {
                     nullable: true,
                     pk: true,
@@ -297,6 +331,7 @@ export default {
                         pk: false,
                         default: null,
                         has_error: false,
+                        placeholder: 'auto',
                         functions: {}
                     };
 
@@ -323,6 +358,7 @@ export default {
                         pk: false,
                         default: null,
                         has_error: false,
+                        placeholder: 'auto',
                         functions: {}
                     };
 

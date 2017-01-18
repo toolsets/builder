@@ -18,6 +18,7 @@ export default {
 
     getters: {
         [ types.GET_SELECTED_ITEM ] (state){
+
             return state.selectedItem;
         },
 
@@ -37,9 +38,6 @@ export default {
                     columns: Object.keys(table.columns)
                 };
             });
-
-            console.log('dataset', dataset);
-
             return dataset;
         }
     },
@@ -48,6 +46,15 @@ export default {
         [ types.UPDATE_SELECTED_ITEM ] (state, item){
 
             var selectedItem = (item) ? _.cloneDeep(item) : null;
+
+            var HasEnumKey = false;
+            Object.keys(selectedItem.columns).map(function(key, indx) {
+                if(selectedItem.columns[key].attributes.type === 'enum') {
+                    HasEnumKey = true;
+                }
+            });
+
+            selectedItem.hasEnumColumns = HasEnumKey;
 
             Vue.set(state, 'selectedItem', selectedItem);
 
@@ -73,6 +80,18 @@ export default {
                 var selectedItem = _.find(dbState.tables, function (tbl) {
                     return tbl.table_name === state.selectedIndex;
                 });
+
+                var HasEnumKey = false;
+
+                if(selectedItem) {
+                    Object.keys(selectedItem.columns).map(function(key, indx) {
+                        if(selectedItem.columns[key].attributes.type === 'enum') {
+                            HasEnumKey = true;
+                        }
+                    });
+                }
+
+                selectedItem.hasEnumColumns = HasEnumKey;
 
                 Vue.set(state, 'selectedItem', selectedItem);
             }
@@ -105,9 +124,11 @@ export default {
 
         [ types.SUBMIT_NEW_TABLE ] ({dispatch}, payload) {
 
-            api.submitNewTable(payload.table).then(function() {
+            return api.submitNewTable(payload.table).then(function(response) {
 
                 dispatch(types.GET_TABLES);
+
+                return response;
             });
 
         }
