@@ -46,10 +46,12 @@ class MakeCommand extends Command
             $this->comment('Project files already exists');
         }
 
-        Artisan::call('vendor:publish', [
+        $this->call('vendor:publish', [
             '--tag' => 'toolsets',
             '--force' => true
         ]);
+
+        $this->comment('Toolsets Builder setup done!');
 
     }
 
