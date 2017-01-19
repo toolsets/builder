@@ -16,7 +16,7 @@
                 </div>
 
                 <input-columns :columns="form.columns" v-on:columns-updated="updateColumnsList"></input-columns>
-                <input-relations :columns="columnKeys" :tables="getTablesList" :relations="form.relations"></input-relations>
+                <input-relations :columns="columnKeys" :tables="getTablesList" :relations="form.relations" :table-name="form.name"></input-relations>
                 <input-indexes :columns="columnKeys" :indexes="form.indexes"></input-indexes>
 
 
@@ -114,7 +114,7 @@ export default {
         }),
 
         submitForm() {
-            console.log('submitForm');
+
             this.storeSubmit({
                table: {
                    name: this.form.name,

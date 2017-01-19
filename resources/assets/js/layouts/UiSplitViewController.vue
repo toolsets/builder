@@ -87,7 +87,6 @@
 
                 if (this.routeDepth > 2) {
                     if (this.isSmallViewPort) {
-                        console.log('layout mode: right');
                         return 'right';
                     } else {
                         return 'both'
