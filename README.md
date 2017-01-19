@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/toolsets/laravel-builder.svg?branch=master)](https://travis-ci.org/toolsets/laravel-builder)
 
 
-### A fluent application builder for Laravel 5.3
+### A fluent application builder for Laravel 5.4 +
 
 - This project is heavily under development and is not recommended for production use until a full stable release. 
 
