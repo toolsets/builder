@@ -22,6 +22,8 @@ const IntegerTypeColumns = [
     "tinyInteger"
 ];
 
+export const EnumTypeWarning = 'Modifying any column in a table that also has a column of type enum is not currently supported by Laravel.';
+
 export function makeTableColumn(col) {
 
     var typeName = col.attributes.type;

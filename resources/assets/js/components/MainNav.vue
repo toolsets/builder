@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">
-                    Toolkit Builder
+                    Toolsets Builder | <small>~ alpha [ UNDER DEVELOPMENT ]</small>
                 </a>
             </div>
         </div>

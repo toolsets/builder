@@ -20,8 +20,8 @@
             </thead>
             <tbody>
             <tr v-if="hasEnumType">
-                <td colspan="7" class="warning">
-                    <p>Warning: Renaming any column in a table that also has a column of type enum is not currently supported by Laravel.</p>
+                <td colspan="9" class="text-warning warning">
+                    <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Warning: {{ EnumWarningMsg }}</p>
                 </td>
             </tr>
             <tr v-for="(col, index) in columns">
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import {EnumTypeWarning} from '../blueprint.js';
 
 const ColumnTypes = [
     "bigIncrements",
@@ -137,7 +138,8 @@ export default {
         return {
             columnTypes: ColumnTypes,
             primaryKey: null,
-            hasEnumType: false
+            hasEnumType: false,
+            EnumWarningMsg: EnumTypeWarning
         }
     },
 

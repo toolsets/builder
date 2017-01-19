@@ -1,7 +1,7 @@
 <template>
     <div class="list-panel">
         <div class="title-header">
-            {{ title }} s: {{ selected }}
+            {{ title }} : {{ selected }}
         </div>
         <div class="toolbar">
             <a class="btn btn-primary" title="Add" v-on:click.stop="onCreate()">
