@@ -6,7 +6,7 @@
             :selected="selectedIndex"
             keyBy="table_name"
             display="table_name"
-            title="Tablessss">
+            title="Tables">
     </list-panel>
 </template>
 <script>
