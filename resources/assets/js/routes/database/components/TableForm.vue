@@ -29,9 +29,7 @@
                         <th>Column</th>
                         <th>Type</th>
                         <th>Length</th>
-                        <th>Unsigned</th>
                         <th>Nullable</th>
-                        <th>AI</th>
                         <th>PK</th>
                         <th>Default</th>
                     </tr>
@@ -47,11 +45,7 @@
                         <td>{{ col.attributes.name }}</td>
                         <td>{{ col.attributes.type }}</td>
                         <td>{{ col.attributes.length }}</td>
-                        <td>
-                            <input type="checkbox" disabled="disabled" v-model='col.attributes.unsigned' />
-                        </td>
                         <td><input type="checkbox" disabled="disabled" v-model='col.attributes.nullable' /></td>
-                        <td><input type="checkbox" disabled="disabled" v-model='col.attributes.autoIncrement' /></td>
                         <td><input type="checkbox" disabled="disabled" v-model='col.attributes.primaryKey' /></td>
                         <td>{{ col.attributes.default }}</td>
                     </tr>

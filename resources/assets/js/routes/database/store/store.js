@@ -1,5 +1,6 @@
 import api from '../api';
 import types from './types';
+import { makeTableColumn } from '../blueprint.js'
 
 var tables = [];
 
@@ -18,7 +19,6 @@ export default {
 
     getters: {
         [ types.GET_SELECTED_ITEM ] (state){
-
             return state.selectedItem;
         },
 
@@ -47,15 +47,6 @@ export default {
 
             var selectedItem = (item) ? _.cloneDeep(item) : null;
 
-            var HasEnumKey = false;
-            Object.keys(selectedItem.columns).map(function(key, indx) {
-                if(selectedItem.columns[key].attributes.type === 'enum') {
-                    HasEnumKey = true;
-                }
-            });
-
-            selectedItem.hasEnumColumns = HasEnumKey;
-
             Vue.set(state, 'selectedItem', selectedItem);
 
             if(item) {
@@ -71,6 +62,32 @@ export default {
 
         [ types.RECEIVE_TABLES ] (state, dbState){
             Vue.set(state, 'tables_list', dbState.tables_list);
+
+            if(dbState.tables.length > 0) {
+                dbState.tables.map(function(table) {
+                    var HasEnumKey = false;
+                    //iterates over each table to prepare the table item state
+                    if(table.columns) {
+                        var columns = Object.keys(table.columns).map(function(colKey) {
+                            var column = table.columns[colKey];
+                            column = makeTableColumn(column);
+
+                            if(HasEnumKey == false && column.type === 'enum') {
+                                HasEnumKey = true;
+                            }
+
+                            console.log('set column', column);
+                            table.columns[colKey] = column;
+                        });
+
+                        table.columns = columns;
+                    }
+
+                    table.hasEnumColumns = HasEnumKey;
+
+                }.bind(this));
+            }
+
             Vue.set(state, 'list', dbState.tables);
             Vue.set(state, 'database', dbState.database);
             Vue.set(state, 'connection', dbState.connection);
@@ -81,22 +98,8 @@ export default {
                     return tbl.table_name === state.selectedIndex;
                 });
 
-                var HasEnumKey = false;
-
-                if(selectedItem) {
-                    Object.keys(selectedItem.columns).map(function(key, indx) {
-                        if(selectedItem.columns[key].attributes.type === 'enum') {
-                            HasEnumKey = true;
-                        }
-                    });
-                }
-
-                selectedItem.hasEnumColumns = HasEnumKey;
-
                 Vue.set(state, 'selectedItem', selectedItem);
             }
-
-            console.log('receiveTables');
 
         }
     },

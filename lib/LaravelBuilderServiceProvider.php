@@ -8,12 +8,7 @@
 
 namespace Toolsets\LaravelBuilder;
 
-use Closure;
-use Illuminate\Database\Console\Migrations\MigrateCommand;
-use Illuminate\Database\Migrations\DatabaseMigrationRepository;
-use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Toolsets\LaravelBuilder\Console\MakeCommand;
 use Toolsets\LaravelBuilder\Services\Database\Connection;
