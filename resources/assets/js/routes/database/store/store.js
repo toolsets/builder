@@ -63,8 +63,9 @@ export default {
         [ types.RECEIVE_TABLES ] (state, dbState){
             Vue.set(state, 'tables_list', dbState.tables_list);
 
-            if(dbState.tables.length > 0) {
-                dbState.tables.map(function(table) {
+            var tables = dbState.tables;
+            if(tables.length > 0) {
+                tables = dbState.tables.map(function(table) {
                     var HasEnumKey = false;
                     //iterates over each table to prepare the table item state
                     if(table.columns) {
@@ -72,23 +73,23 @@ export default {
                             var column = table.columns[colKey];
                             column = makeTableColumn(column);
 
-                            if(HasEnumKey == false && column.type === 'enum') {
+                            if(HasEnumKey == false && column.attributes.type === 'enum') {
                                 HasEnumKey = true;
                             }
 
                             console.log('set column', column);
                             table.columns[colKey] = column;
                         });
-
-                        table.columns = columns;
                     }
 
                     table.hasEnumColumns = HasEnumKey;
 
+                    return table;
+
                 }.bind(this));
             }
 
-            Vue.set(state, 'list', dbState.tables);
+            Vue.set(state, 'list', tables);
             Vue.set(state, 'database', dbState.database);
             Vue.set(state, 'connection', dbState.connection);
 
