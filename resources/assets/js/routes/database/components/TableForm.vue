@@ -145,14 +145,6 @@ export default {
             this.$router.push({ path: '/database' })
         }
 
-    },
-
-
-    mounted() {
-        console.log('Table Form Component mounted.')
-        console.log(this.$store.state);
-
-        //this.listenOnBus('database.table.selected',  this.updateFormData);
     }
 }
 </script>
