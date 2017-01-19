@@ -4,7 +4,6 @@
             <div class="input-title">
                 <label>Table Relations</label>
             </div>
-            {{ columnKeys }}
         </div>
 
         <table class="table table-striped table-responsive">
@@ -29,6 +28,7 @@
                     </td>
                     <td>
                         <select v-model="row.fk_table" class="form-control">
+                            <option v-if="tableName" v-bind:value="tableName">{{ tableName }}</option>
                             <option v-for="option in tables" v-bind:value="option">
                                 {{ option }}
                             </option>
@@ -38,8 +38,15 @@
                         <select v-if="!row.fk_table" v-model="row.fk_column" disabled="disabled" class="form-control">
                             <option value="null"></option>
                         </select>
-                        <select v-model="row.fk_column" class="form-control" v-if="row.fk_table">
-                            <option   v-for="option in table_data[row.fk_table].columns" v-bind:value="option">
+
+                        <select v-model="row.fk_column" class="form-control" v-if="row.fk_table && row.fk_table === tableName">
+                            <option v-for="option in columns" v-bind:value="option">
+                                {{ option }}
+                            </option>
+                        </select>
+
+                        <select v-model="row.fk_column" class="form-control" v-if="row.fk_table && row.fk_table !== tableName" >
+                            <option  v-for="option in table_data[row.fk_table].columns" v-bind:value="option">
                                 {{ option }}
                             </option>
                         </select>
@@ -90,7 +97,9 @@ export default {
         tables: {
             type: Array,
             required: true
-        }
+        },
+
+        tableName: String
     },
 
     computed: {

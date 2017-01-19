@@ -77,7 +77,6 @@ export default {
                                 HasEnumKey = true;
                             }
 
-                            console.log('set column', column);
                             table.columns[colKey] = column;
                         });
                     }
@@ -118,10 +117,8 @@ export default {
 
         [ types.GET_TABLES ] ({commit}) {
 
-            console.log('calling getAllTables from store');
             api.getAllTables().then(function(response)
             {
-                console.log('response', response);
                 commit('receiveTables', response.body)
             });
         },
