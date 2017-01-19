@@ -6,13 +6,13 @@
  * Time: 1:39 PM
  */
 
-namespace Toolsets\LaravelBuilder\Services\Database\Migration\Console;
+namespace Toolsets\Builder\Services\Database\Migration\Console;
 
 
 use Illuminate\Database\Console\Migrations\BaseCommand;
 use Illuminate\Database\Migrations\Migrator;
-use Toolsets\LaravelBuilder\Services\Database\Migration\MigrationSnapshot;
-use Toolsets\LaravelBuilder\Services\Database\Schema\Builder;
+use Toolsets\Builder\Services\Database\Migration\MigrationSnapshot;
+use Toolsets\Builder\Services\Database\Schema\Builder;
 
 class MigrationReader extends BaseCommand
 {

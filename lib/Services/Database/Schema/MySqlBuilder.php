@@ -6,7 +6,7 @@
  * Time: 1:19 PM
  */
 
-namespace Toolsets\LaravelBuilder\Services\Database\Schema;
+namespace Toolsets\Builder\Services\Database\Schema;
 
 
 class MySqlBuilder extends Builder

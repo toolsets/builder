@@ -1,5 +1,5 @@
 ## Laravel Builder
-[![Build Status](https://travis-ci.org/toolsets/laravel-builder.svg?branch=master)](https://travis-ci.org/toolsets/laravel-builder)
+[![Build Status](https://travis-ci.org/toolsets/builder.svg?branch=master)](https://travis-ci.org/toolsets/builder)
 
 
 ### A fluent application builder for Laravel 5.4 +

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Toolsets\LaravelBuilder\Repositories\DatabaseTables;
+use Toolsets\Builder\Repositories\DatabaseTables;
 
 Route::get('/', function ()
 {

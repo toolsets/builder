@@ -6,9 +6,10 @@
  * Time: 2:42 AM
  */
 
-namespace Toolsets\LaravelBuilder\Console;
+namespace Toolsets\Builder\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Yaml\Yaml;
 
@@ -44,6 +45,11 @@ class MakeCommand extends Command
         } else {
             $this->comment('Project files already exists');
         }
+
+        Artisan::call('vendor:publish', [
+            '--tag' => 'toolsets',
+            '--force' => true
+        ]);
 
     }
 

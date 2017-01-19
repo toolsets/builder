@@ -6,13 +6,13 @@
  * Time: 7:33 PM
  */
 
-namespace Toolsets\LaravelBuilder\Services\Database;
+namespace Toolsets\Builder\Services\Database;
 
 
 use Illuminate\Database\SQLiteConnection as LaravelSQLiteConnection;
-use Toolsets\LaravelBuilder\Services\Database\Schema\Builder;
-use Toolsets\LaravelBuilder\Services\Database\Schema\Grammars\SQLiteGrammar;
-use Toolsets\LaravelBuilder\Services\Database\Schema\SnapshotBlueprint;
+use Toolsets\Builder\Services\Database\Schema\Builder;
+use Toolsets\Builder\Services\Database\Schema\Grammars\SQLiteGrammar;
+use Toolsets\Builder\Services\Database\Schema\SnapshotBlueprint;
 
 class SQLiteConnection extends LaravelSQLiteConnection
 {

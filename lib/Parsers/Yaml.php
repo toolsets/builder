@@ -6,7 +6,7 @@
  * Time: 1:20 AM
  */
 
-namespace Toolsets\LaravelBuilder\Parsers;
+namespace Toolsets\Builder\Parsers;
 
 
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;

@@ -6,7 +6,7 @@
  * Time: 9:54 PM
  */
 
-namespace Toolsets\LaravelBuilder\Services\Database\Migration;
+namespace Toolsets\Builder\Services\Database\Migration;
 
 
 use Illuminate\Database\Connection;
@@ -14,7 +14,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Fluent;
-use Toolsets\LaravelBuilder\Parsers\Yaml;
+use Toolsets\Builder\Parsers\Yaml;
 
 
 class MigrationSnapshot

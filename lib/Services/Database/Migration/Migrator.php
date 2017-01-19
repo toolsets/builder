@@ -6,7 +6,7 @@
  * Time: 10:57 AM
  */
 
-namespace Toolsets\LaravelBuilder\Services\Database\Migration;
+namespace Toolsets\Builder\Services\Database\Migration;
 
 
 use Illuminate\Database\Migrations\Migrator as LaravelMigrator;

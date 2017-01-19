@@ -6,17 +6,17 @@
  * Time: 7:57 PM
  */
 
-namespace Toolsets\LaravelBuilder;
+namespace Toolsets\Builder;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Toolsets\LaravelBuilder\Console\MakeCommand;
-use Toolsets\LaravelBuilder\Services\Database\Connection;
-use Toolsets\LaravelBuilder\Services\Database\DbConnectionProvider;
-use Toolsets\LaravelBuilder\Services\Database\Migration\Console\BlueprintWatcher;
-use Toolsets\LaravelBuilder\Services\Database\Migration\Console\MigrationReader;
-use Toolsets\LaravelBuilder\Services\Database\Migration\MigrationCreator;
-use Toolsets\LaravelBuilder\Services\Database\Migration\Migrator;
+use Toolsets\Builder\Console\MakeCommand;
+use Toolsets\Builder\Services\Database\Connection;
+use Toolsets\Builder\Services\Database\DbConnectionProvider;
+use Toolsets\Builder\Services\Database\Migration\Console\BlueprintWatcher;
+use Toolsets\Builder\Services\Database\Migration\Console\MigrationReader;
+use Toolsets\Builder\Services\Database\Migration\MigrationCreator;
+use Toolsets\Builder\Services\Database\Migration\Migrator;
 
 class LaravelBuilderServiceProvider extends ServiceProvider
 {
@@ -25,7 +25,7 @@ class LaravelBuilderServiceProvider extends ServiceProvider
 
     protected $config_name = 'builder';
 
-    protected $namespace = 'Toolsets\LaravelBuilder\Controllers';
+    protected $namespace = 'Toolsets\Builder\Controllers';
 
 
     public function boot()
@@ -41,7 +41,7 @@ class LaravelBuilderServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../build' => public_path('vendor/' . $this->package_name),
             __DIR__.'/../resources/assets/fonts' => public_path('vendor/' . $this->package_name . '/fonts')
-        ], 'public');
+        ], 'toolsets');
 
         if ($this->app->runningInConsole()) {
             $this->commands([

@@ -6,14 +6,14 @@
  * Time: 7:24 PM
  */
 
-namespace Toolsets\LaravelBuilder\Repositories;
+namespace Toolsets\Builder\Repositories;
 
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Toolsets\LaravelBuilder\Parsers\Yaml;
-use Toolsets\LaravelBuilder\Services\Database\Migration\MigrationCreator;
+use Toolsets\Builder\Parsers\Yaml;
+use Toolsets\Builder\Services\Database\Migration\MigrationCreator;
 
 class DatabaseTables
 {

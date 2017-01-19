@@ -6,13 +6,13 @@
  * Time: 7:33 PM
  */
 
-namespace Toolsets\LaravelBuilder\Services\Database;
+namespace Toolsets\Builder\Services\Database;
 
 
 use Illuminate\Database\PostgresConnection as LaravelPostgresConnection;
-use Toolsets\LaravelBuilder\Services\Database\Schema\Builder;
-use Toolsets\LaravelBuilder\Services\Database\Schema\Grammars\PostgresGrammar;
-use Toolsets\LaravelBuilder\Services\Database\Schema\PostgresBuilder;
+use Toolsets\Builder\Services\Database\Schema\Builder;
+use Toolsets\Builder\Services\Database\Schema\Grammars\PostgresGrammar;
+use Toolsets\Builder\Services\Database\Schema\PostgresBuilder;
 
 
 class PostgresConnection extends LaravelPostgresConnection
