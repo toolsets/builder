@@ -84,7 +84,6 @@ const ColumnTypes = [
     "morphs",
     "nullableMorphs",
     "nullableTimestamps",
-    "rememberToken",
     "smallIncrements",
     "smallInteger",
     "string",

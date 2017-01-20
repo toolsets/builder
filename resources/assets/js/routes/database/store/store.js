@@ -69,7 +69,7 @@ export default {
                     var HasEnumKey = false;
                     //iterates over each table to prepare the table item state
                     if(table.columns) {
-                        var columns = Object.keys(table.columns).map(function(colKey) {
+                        Object.keys(table.columns).map(function(colKey) {
                             var column = table.columns[colKey];
                             column = makeTableColumn(column);
 
@@ -82,6 +82,16 @@ export default {
                     }
 
                     table.hasEnumColumns = HasEnumKey;
+
+                    // create an empty state for updates
+                    table.updates = {
+                        tableName: null,
+                        changeColumns: null,
+                        renameColumns: null,
+                        dropColumns: null,
+                        dropForeigns: null,
+                        dropIndexes: null
+                    };
 
                     return table;
 

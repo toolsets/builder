@@ -21,6 +21,13 @@ const CreateFormComponent = resolve => {
 }
 
 
+const UpdateFormComponent = resolve => {
+    require.ensure(['./components/UpdateForm.vue'], () => {
+        resolve(require('./components/UpdateForm.vue'))
+    })
+}
+
+
 const TableUpdateForm = resolve => {
     require.ensure(['./components/UpdateForm.vue'], () => {
         resolve(require('./components/UpdateForm.vue'))
@@ -46,6 +53,7 @@ export default (store) => {
         children: [
             {
                 path: '/',
+                name: 'db-tables',
                 components: {
                     list: DbTables,
                     form: EmptyFormComponent
@@ -54,14 +62,7 @@ export default (store) => {
 
             {
                 path: 'create',
-                components: {
-                    list: DbTables,
-                    form: CreateFormComponent
-                }
-            },
-
-            {
-                path: 'update',
+                name: 'db-table-create',
                 components: {
                     list: DbTables,
                     form: CreateFormComponent
@@ -70,6 +71,7 @@ export default (store) => {
 
             {
                 path: ':key',
+                name: 'db-table-view',
                 components: {
                     list: DbTables,
                     form: TableForm
@@ -78,10 +80,11 @@ export default (store) => {
                 children : [
                     {
                         path: 'update',
+                        name: 'db-table-update',
                         components: {
                             list: DbTables,
                             form: TableForm,
-                            update_form: TableUpdateForm
+                            update_form: UpdateFormComponent
                         }
                     }
                 ]

@@ -11,8 +11,8 @@
                     <a class="btn btn-default" title="Back" v-if="showBackButton">
                         <i class="fa fa-chevron-left" v-on:click.stop="goBack()"></i>
                     </a>
-                    <a class="btn btn-primary" title="Add" v-on:click.stop="onCreate()">
-                        <i class="fa fa-plus"></i>
+                    <a class="btn btn-primary" title="Edit" v-on:click.stop="goEditPage()">
+                        <i class="fa fa-pencil"></i>
                     </a>
 
                 </div>
@@ -143,6 +143,10 @@ export default {
 
         goBack() {
             this.$router.push({ path: '/database' })
+        },
+
+        goEditPage() {
+            this.$router.push({ name: 'db-table-update', params: { key : this.selectedItem.table_name }})
         }
 
     }
