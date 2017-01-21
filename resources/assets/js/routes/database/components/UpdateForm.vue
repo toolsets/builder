@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <input-columns :columns="selectedItem.columns"></input-columns>
+            <input-columns :selected="selectedItem"></input-columns>
 
 
 
@@ -84,6 +84,37 @@ export default {
 }
 </script>
 <style lang="sass">
+.table {
+    font-size: 1em;
+    background-color: #FFF;
 
+.tbl-status {
+    width: 10px;
+    padding: 0;
+}
+
+td.migrated {
+    background-color: #2b542c;
+}
+
+td.not-migrated {
+    background-color: #985f0d;
+}
+
+tr.drop-column {
+td.migrated {
+    background-color: #cc1214;
+}
+
+td.not-migrated {
+    background-color: #cc1214;
+}
+
+td {
+    color: #cc1214;
+    text-decoration: line-through;
+}
+}
+}
 
 </style>

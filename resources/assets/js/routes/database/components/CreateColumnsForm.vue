@@ -209,8 +209,6 @@ export default {
                     //check for functionalities column types
                     if (AllColumnsFunctionalyChecked.indexOf(item.type) !== -1 ) {
 
-
-
                         if (IncrementColumns.indexOf(item.type) !== -1) {
 
                             item.functions.nullable = false;

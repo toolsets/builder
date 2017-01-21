@@ -67,11 +67,18 @@ export default {
             if(tables.length > 0) {
                 tables = dbState.tables.map(function(table) {
                     var HasEnumKey = false;
+                    var PrimaryKeyColumn = null;
                     //iterates over each table to prepare the table item state
                     if(table.columns) {
                         Object.keys(table.columns).map(function(colKey) {
                             var column = table.columns[colKey];
                             column = makeTableColumn(column);
+
+                            if(column.attributes.primaryKey) {
+                                PrimaryKeyColumn = {
+                                    name: column.attributes.name
+                                }
+                            }
 
                             if(HasEnumKey == false && column.attributes.type === 'enum') {
                                 HasEnumKey = true;
@@ -82,15 +89,12 @@ export default {
                     }
 
                     table.hasEnumColumns = HasEnumKey;
+                    table.primaryKeyColumn = PrimaryKeyColumn;
 
                     // create an empty state for updates
                     table.updates = {
                         tableName: null,
-                        changeColumns: null,
-                        renameColumns: null,
-                        dropColumns: null,
-                        dropForeigns: null,
-                        dropIndexes: null
+                        tableDrop: false,
                     };
 
                     return table;

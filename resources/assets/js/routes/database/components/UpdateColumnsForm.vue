@@ -9,11 +9,11 @@
         <table class="table table-striped table-responsive">
             <thead>
             <tr>
+                <th class="tbl-status"></th>
                 <th class="col-name">Column</th>
                 <th class="col-type">Type</th>
                 <th>Length</th>
                 <th>Nullable</th>
-                <th>PK</th>
                 <th>Default</th>
                 <th></th>
             </tr>
@@ -24,25 +24,9 @@
                     <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Warning: {{ EnumWarningMsg }}</p>
                 </td>
             </tr>
-            <tr v-for="(col, index) in columns">
-                <td v-bind:class="{'has-error': col.has_error == true}"><input type='text' class="form-control" v-model="col.attributes.name"  /></td>
-                <td >
-                    <select v-model="col.attributes.type" class="form-control">
-                        <option v-for="option in changeableTypes" v-bind:value="option">
-                            {{ option }}
-                        </option>
-                    </select>
-                </td>
-                <td>
-                    <input type='text' class="form-control" v-model="col.attributes.length"/>
-                </td>
-                <td><input type="checkbox" value="1" v-model="col.attributes.nullable" /></td>
-                <td><input type="radio" v-bind:value='col' v-model="primaryKey" /></td>
-                <td><input type='text' class="form-control" v-model="col.attributes.default" placeholder="none"  /></td>
-                <td>
-                    <button type="button" class="btn btn-default btn-sm" @click='removeColumn(col)'><i class="fa fa-trash"></i> </button>
-                </td>
-            </tr>
+
+            <column v-for="col in columns" :column="col" :editable="editable" :change-types="changeableTypes" :column-update="updateColumn"></column>
+
 
             </tbody>
         </table>
@@ -59,6 +43,7 @@
 </template>
 <script>
 import {EnumTypeWarning} from '../blueprint.js';
+import UpdateColumnComponent from './updateColumn.vue';
 
 const ColumnTypes = [
     "bigIncrements",
@@ -169,11 +154,59 @@ const Changeable = [
     "unsignedSmallInteger"
 ];
 
+function makeUpdatableTableObject(selectedItem) {
+
+    var table = {};
+    var PrimaryKeyColumn = null;
+    var columnRefs = {};
+
+    if(selectedItem) {
+        table.name = selectedItem.name;
+        table.columns = Object.keys(selectedItem.columns).map(function(key) {
+
+            var item = selectedItem.columns[key];
+
+            var columnObj = {
+                key: key,
+                name: item.attributes.name,
+                type: item.attributes.type,
+                length: item.attributes.length,
+                nullable: item.attributes.nullable,
+                default: item.attributes.default,
+                migrated: item.migrated,
+                updates: {
+                    change_name: null,
+                    change_type: null,
+                    change_length: null,
+                    change_nullable: null,
+                    change_default: null
+                }
+            };
+
+            if(columnObj.primaryKey) {
+                PrimaryKeyColumn = key;
+            }
+
+            columnRefs[key] = columnObj;
+
+            return columnObj;
+        });
+
+        table.updates = selectedItem.updates;
+        table.hasEnumColumns = selectedItem.hasEnumColumns;
+        table.updates = selectedItem.updates;
+        table.columnRefs = columnRefs;
+    }
+
+    return table;
+}
 
 export default{
 
+    components: { column : UpdateColumnComponent },
+
     props: {
-        columns : {
+        selected : {
             type: Object,
             required: true
         }
@@ -182,13 +215,68 @@ export default{
     computed: {
         totalColumns : function() {
             return 0;
+        },
+
+        columns: function() {
+            return this.selectedTable.columns;
+        },
+
+        editable: function () {
+            return this.selectedTable.hasEnumColumns !== true;
         }
     },
 
     data(){
         return{
             columnTypes : ColumnTypes,
-            changeableTypes : Changeable
+            changeableTypes : Changeable,
+            hasEnumType: this.selected.hasEnumColumns,
+            EnumWarningMsg: EnumTypeWarning,
+            selectedTable: makeUpdatableTableObject(this.selected)
+        }
+    },
+
+    methods: {
+
+        updateColumn(colKey, property, value) {
+
+            var column = this.selectedTable.columnRefs[colKey];
+            if(column){
+                if(column[property] !== undefined) {
+                    var property_change_key = 'change_' + property;
+
+                    value = (value !== '') ? value : null;
+
+                    if(column.updates[property_change_key] === null) {
+                        column.updates[property_change_key] = {
+                            from: column[property],
+                            to: value
+                        }
+                    } else {
+                        if(column.updates[property_change_key].from == value) {
+                            column.updates[property_change_key] = null;
+                        } else {
+                            column.updates[property_change_key].to = value;
+                        }
+                    }
+
+                    column[property] = value;
+
+
+                }
+            }
+        },
+
+        addColumn() {
+
+        },
+
+        addTimestamps() {
+
+        },
+
+        addTimestampsTz() {
+
         }
     }
 }

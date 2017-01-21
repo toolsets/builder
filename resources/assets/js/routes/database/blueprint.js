@@ -48,9 +48,18 @@ export function makeTableColumn(col) {
             }
         }
 
-
-
     }
+
+    // sets structure of column updates
+    col.updates = {
+        change_name : null,
+        change_type: null,
+        change_length: null,
+        change_nullable: null,
+        change_primaryKey: null,
+        change_default: null,
+        dropColumn: false,
+    };
 
     return col;
 }
