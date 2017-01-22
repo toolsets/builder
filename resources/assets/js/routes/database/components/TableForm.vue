@@ -172,11 +172,11 @@ export default {
     }
 
     td.migrated {
-        background-color: #2b542c;
+        background-color: #3f964e;
     }
 
     td.not-migrated {
-        background-color: #985f0d;
+        background-color: #c9a900;
     }
 
     tr.drop-column {

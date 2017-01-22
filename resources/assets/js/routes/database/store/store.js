@@ -84,6 +84,8 @@ export default {
                                 HasEnumKey = true;
                             }
 
+                            column.onFile = true;
+
                             table.columns[colKey] = column;
                         });
                     }

@@ -15,20 +15,17 @@
                 </div>
             </div>
 
-            <input-columns :selected="selectedItem"></input-columns>
+            <input-columns :selected="selectedItem" :tables="getTablesList"></input-columns>
 
-
-
-            {{ selectedItem.updates }}
         </div>
     </div>
 </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import types from '../store/types';
-import UpdateColumnsForm from './UpdateColumnsForm.vue'
+import UpdateFormComponent from './UpdateFormComponent.vue'
 
 
 function setComputedValue(newValue, fromKey, toKey, data) {
@@ -53,7 +50,7 @@ function getComputedValue(fromKey, toKey, data) {
 export default {
 
      components: {
-        'input-columns': UpdateColumnsForm
+        'input-columns': UpdateFormComponent
      },
 
      data() {
@@ -66,6 +63,8 @@ export default {
     computed : {
 
         ...mapState('database', ['selectedItem']),
+
+        ...mapGetters('database',['getTablesList']),
 
         tableName : {
 
@@ -84,9 +83,20 @@ export default {
 }
 </script>
 <style lang="sass">
+.toolbar {
+    padding: 8px;
+    background-color: #ebeaee;
+
+.btn {
+    font-size: .8em;
+}
+
+}
+
 .table {
     font-size: 1em;
     background-color: #FFF;
+    margin-bottom: 0px;
 
 .tbl-status {
     width: 10px;
@@ -94,26 +104,19 @@ export default {
 }
 
 td.migrated {
-    background-color: #2b542c;
+    background-color: #3f964e;
 }
 
 td.not-migrated {
-    background-color: #985f0d;
+    background-color: #c9a900;
 }
 
-tr.drop-column {
-td.migrated {
-    background-color: #cc1214;
+.col-type {
+    width:200px;
 }
 
-td.not-migrated {
-    background-color: #cc1214;
-}
-
-td {
-    color: #cc1214;
-    text-decoration: line-through;
-}
+.col-name {
+    width:230px;
 }
 }
 
