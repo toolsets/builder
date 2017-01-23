@@ -51,8 +51,7 @@
             <thead>
                 <tr>
                     <th class="tbl-status"></th>
-                    <th>Name</th>
-                    <th>Columns</th>
+                    <th>Column</th>
                     <th>FK Table</th>
                     <th>FK Columns</th>
                     <th>On Update</th>
@@ -63,16 +62,121 @@
             <tbody>
                 <tr v-for="fk in relations" v-bind:class="{ 'drop-column': fk.drop }">
                     <td v-bind:class="{ migrated: fk.migrated == true, 'not-migrated': fk.migrated == false}" class="tbl-status"></td>
-                    <td>{{ fk.index }}</td>
-                    <td>{{ fk.columns }}</td>
+                    <td>{{ fk.column }}</td>
                     <td>{{ fk.fk_table }}</td>
                     <td>{{ fk.fk_column }}</td>
                     <td>{{ fk.on_update ? fk.on_update : '' }}</td>
                     <td>{{ fk.on_delete ? fk.on_delete : '' }}</td>
-                    <td><button type="button" class="btn btn-default btn-sm" @click='dropRelation(row)'><i class="fa fa-trash"></i> </button></td>
+                    <td><button type="button" class="btn btn-default btn-sm" @click='dropRelation(fk)'><i class="fa fa-trash"></i> </button></td>
+                </tr>
+                <tr v-for="nfk in relations_added">
+                    <td class="tbl-status not-migrated"></td>
+                    <td>
+                        <select v-model="nfk.column" class="form-control">
+                            <option v-for="col in columnsListArray" v-bind:value="col">{{ col }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select v-model="nfk.fk_table" class="form-control">
+                            <option v-for="tbl in tables" v-bind:value="tbl">{{ tbl }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select v-if="!nfk.fk_table" v-model="nfk.fk_column" disabled="disabled" class="form-control">
+                            <option value="null"></option>
+                        </select>
+
+                        <select v-model="nfk.fk_column" class="form-control" v-if="nfk.fk_table && nfk.fk_table === selectedTable.name">
+                            <option v-for="option in columnsListArray" v-bind:value="option">
+                                {{ option }}
+                            </option>
+                        </select>
+
+                        <select v-model="nfk.fk_column" class="form-control" v-if="nfk.fk_table && nfk.fk_table !== selectedTable.name">
+                            <option  v-for="option in table_data[nfk.fk_table].columns" v-bind:value="option">
+                                {{ option }}
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <select v-model="nfk.on_update" class="form-control" >
+                            <option value="none">None</option>
+                            <option value="cascade">CASCADE</option>
+                            <option value="set_null">SET NULL</option>
+                            <option value="restrict">RESTRICT</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select v-model="nfk.on_delete" class="form-control" >
+                            <option value="none">None</option>
+                            <option value="cascade">CASCADE</option>
+                            <option value="set_null">SET NULL</option>
+                            <option value="restrict">RESTRICT</option>
+                        </select>
+                    </td>
+                    <td><button type="button" class="btn btn-default btn-sm" @click='dropNewRelation(nfk)'><i class="fa fa-trash"></i> </button></td>
                 </tr>
             </tbody>
         </table>
+
+
+        <div class="toolbar">
+            <a class="btn btn-primary" title="Add Relation" @click='addRelation'>Add Relation</a>
+        </div>
+
+
+
+        <div class="builder-form">
+            <div class="input-title">
+                <label>Table Indexes</label>
+            </div>
+        </div>
+
+        <table class="table table-striped table-responsive">
+            <thead>
+                <tr>
+                    <th class="tbl-status"></th>
+                    <th>Type</th>
+                    <th>Columns</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="indx in indexes" v-bind:class="{ 'drop-column': indx.drop }">
+                    <td v-bind:class="{ migrated: indx.migrated == true, 'not-migrated': indx.migrated == false}" class="tbl-status"></td>
+                    <td>{{ indx.type }}</td>
+                    <td>{{ indx.columns }}</td>
+                    <td><button type="button" class="btn btn-default btn-sm" @click='dropIndex(indx)'><i class="fa fa-trash"></i> </button></td>
+                </tr>
+                <tr v-for="indColumn in indexes_added">
+                    <td class="tbl-status not-migrated"></td>
+                    <td>
+                        <select v-model="indColumn.type" class="form-control">
+                            <option value="index">INDEX</option>
+                            <option value="unique">UNIQUE</option>
+                            <option value="primary">PRIMARY (composite)</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select v-model="indColumn.columns" class="form-control" multiple="multiple">
+                            <option v-for="option in columnsListArray" v-bind:value="option">
+                                {{ option }}
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default btn-sm" @click='dropNewIndex(indColumn)'><i class="fa fa-trash"></i> </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="toolbar">
+            <a class="btn btn-primary" title="Add Index" @click='addIndex'>Add Index</a>
+        </div>
+
+
+
 
     </div>
 </template>
@@ -235,11 +339,15 @@ function makeUpdatableTableObject(selectedItem) {
             return columnObj;
         });
 
+        table.relations = selectedItem.relations;
+        table.relations_added = [];
+
         table.updates = selectedItem.updates;
         table.hasEnumColumns = selectedItem.hasEnumColumns;
         table.updates = selectedItem.updates;
-        table.relations = selectedItem.relations;
+
         table.indexes = selectedItem.indexes;
+        table.indexes_added = [];
         table.columnRefs = columnRefs;
     }
 
@@ -322,7 +430,16 @@ export default{
         },
 
         columnsListArray: function() {
-            return Object.keys(this.columnsList);
+
+            var cols = [];
+
+            this.selectedTable.columns.map(function(item) {
+               if(item.drop !== true) {
+                   cols.push(item.name);
+               }
+            });
+
+            return cols;
         },
 
         columns: function() {
@@ -331,6 +448,18 @@ export default{
 
         relations: function () {
             return this.selectedTable.relations;
+        },
+
+        relations_added: function () {
+            return this.selectedTable.relations_added;
+        },
+
+        indexes: function () {
+            return this.selectedTable.indexes;
+        },
+
+        indexes_added: function () {
+            return this.selectedTable.indexes_added;
         },
 
         editable: function () {
@@ -356,6 +485,11 @@ export default{
             if(column){
                 if(column[property] !== undefined) {
 
+                    if(property === 'drop') {
+                        //check if any index needs to be dropped due to the column
+                        this.dropRelationByColumn(column);
+                    }
+
                     //check for newly created columns drop
                     if(property === 'drop' && column.onFile === false) {
 
@@ -367,6 +501,8 @@ export default{
 
                        return;
                     }
+
+
 
                     value = (value !== '') ? value : null;
 
@@ -395,8 +531,58 @@ export default{
             }
         },
 
-        dropRelation(row) {
-            // TODO
+        dropRelation(relation) {
+
+            relation.drop = !relation.drop;
+            if(relation.drop) {
+                relation.updates = {
+                    change_drop: {
+                        from: false,
+                        to: true
+                    }
+                }
+
+            } else {
+                relation.updates = {
+                    change_drop: null
+                }
+            }
+
+        },
+
+        dropRelationByColumn(column) {
+
+            this.relations.map(function (relation) {
+                if(relation.column === column.name && relation.drop === false) {
+                    this.dropRelation(relation);
+                }
+            }.bind(this));
+
+            this.relations_added.map(function (relation) {
+                if(relation.column === column.name && relation.drop === false) {
+                    this.dropNewRelation(relation);
+                }
+            }.bind(this));
+        },
+
+        dropNewRelation(relation) {
+            var selectedTable = this.selectedTable;
+            var indx = selectedTable.relations_added.indexOf(relation);
+            selectedTable.relations_added.splice(indx, 1);
+            this.$set(this.selectedTable, selectedTable);
+        },
+
+        addRelation() {
+            var newRelation = {
+                column: null,
+                fk_column: null,
+                fk_table: null,
+                on_delete: null,
+                on_update:null
+            };
+            var selectedTable = this.selectedTable;
+            selectedTable.relations_added.push(newRelation);
+            this.$set(this.selectedTable, selectedTable);
         },
 
         addColumn() {
@@ -405,6 +591,41 @@ export default{
 
             this.selectedTable.columns.push(column);
             this.selectedTable.columnRefs[tempKey] = column;
+        },
+
+        dropIndex(indexItem) {
+            indexItem.drop = !indexItem.drop;
+            if(indexItem.drop) {
+                indexItem.updates = {
+                    change_drop: {
+                        from: false,
+                        to: true
+                    }
+                }
+
+            } else {
+                indexItem.updates = {
+                    change_drop: null
+                }
+            }
+        },
+
+        dropNewIndex(indexItem) {
+            var selectedTable = this.selectedTable;
+            var indx = selectedTable.indexes_added.indexOf(indexItem);
+            selectedTable.indexes_added.splice(indx, 1);
+            this.$set(this.selectedTable, selectedTable);
+        },
+
+        addIndex() {
+           var newIndex = {
+               columns: [],
+               type:null
+           };
+
+            var selectedTable = this.selectedTable;
+            selectedTable.indexes_added.push(newIndex);
+            this.$set(this.selectedTable, selectedTable);
         },
 
         addTimestamps() {

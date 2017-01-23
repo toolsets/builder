@@ -90,6 +90,32 @@ export default {
                         });
                     }
 
+                    //sets relations with current state
+                    if(table.relations.length > 0) {
+                        table.relations = table.relations.map(function(relation) {
+                            relation.drop = false;
+                            relation.updates = {
+                                change_drop: null
+                            };
+                            relation.onFile = true;
+
+                            return relation;
+                        });
+                    }
+
+                    //sets indexes with current state
+                    if(table.indexes.length > 0) {
+                        table.indexes = table.indexes.map(function(index) {
+                            index.drop = false;
+                            index.updates = {
+                                change_drop: null
+                            };
+                            index.onFile = true;
+
+                            return index;
+                        });
+                    }
+
                     table.hasEnumColumns = HasEnumKey;
                     table.primaryKeyColumn = PrimaryKeyColumn;
 

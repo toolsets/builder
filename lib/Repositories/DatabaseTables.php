@@ -113,22 +113,58 @@ class DatabaseTables
         if (isset($schema['connections'][$db_connection])
             && isset($schema['connections'][$db_connection]['databases'][$database_name])) {
             $tables = $this->normalizeTableData($schema['connections'][$db_connection]['databases'][$database_name]);
-            foreach ($tables as $table) {
-                $tables_list[] = $table['table_name'];
-            }
         }
 
         return [
             'connection' => $db_connection,
             'database' => $database_name,
-            'tables' => $tables,
-            'tables_list' => $tables_list
+            'tables' => $tables['tables'],
+            'tables_list' => $tables['tables_list']
         ];
     }
 
     protected function normalizeTableData($tables)
     {
-        return array_values($tables['tables']);
+        $tables = array_values($tables['tables']);
+        $normalized = [
+            'tables' => [],
+            'tables_list' => []
+        ];
+        foreach($tables as $table) {
+
+            $normalized['tables_list'][] = $table['table_name'];
+
+            $relations = [];
+
+            if(isset($table['relations'])) {
+                foreach($table['relations'] as $relationIndex => $relation) {
+                    $relations[] = [
+                        'column' => $relation['columns'][0],
+                        'index' => $relation['index'],
+                        'fk_column' => $relation['fk_column'],
+                        'fk_table' => $relation['fk_table'],
+                        'on_delete' => isset($relation['on_delete']) ? $relation['on_delete'] : null,
+                        'on_update' => isset($relation['on_update']) ? $relation['on_update'] : null,
+                        'migrated' => $relation['migrated']
+                    ];
+                }
+            }
+
+            $indexes = [];
+
+            if(isset($table['indexes'])) {
+                foreach($table['indexes'] as $indexKey => $index) {
+                    $indexes[] = $index;
+                }
+            }
+
+            $table['relations'] = $relations;
+            $table['indexes'] = $indexes;
+
+            $normalized['tables'][] = $table;
+
+        }
+        return $normalized;
     }
 
     public function createNewTable($data)

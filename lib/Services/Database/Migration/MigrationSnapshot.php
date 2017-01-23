@@ -140,7 +140,13 @@ class MigrationSnapshot
 
         if (!empty($commands)) {
             $table_state = $this->data[$connectionName][$databaseName][$table];
-            $newState = $this->processCommands($commands, $table_state);
+            $newState = $this->processCommands($commands, $table_state, $table);
+
+            //check if table name was renamed
+            if($newState['name']['renamed']) {
+                unset($this->data[$connectionName][$databaseName][$table]);
+                $table = $newState['name']['current'];
+            }
             $this->data[$connectionName][$databaseName][$table] = $newState;
         }
 //        $this->data[$connectionName][$databaseName][$table]['command'] = $commands;
@@ -282,6 +288,7 @@ class MigrationSnapshot
 
                     $tbls[] = [
                         'table_name' => $table,
+                        'name' => $describer['name'],
                         'columns' => $describer['columns'],
                         'relations' => $describer['relations'],
                         'indexes'   => $describer['indexes'],
@@ -303,7 +310,7 @@ class MigrationSnapshot
         return $formatted;
     }
 
-    protected function processCommands($commands, $table_state)
+    protected function processCommands($commands, $table_state, $tableName)
     {
         $columns = $table_state['columns'];
         if(!isset($table_state['relations']))
@@ -319,6 +326,15 @@ class MigrationSnapshot
         if(!isset($table_state['commands']))
         {
             $table_state['commands'] = [];
+        }
+
+        if(!isset($table_state['name'])) {
+            $table_state['name'] = [
+                'current' => $tableName,
+                'renamed' => false,
+                'previous' => null,
+                'migrated' => static::$migrated
+            ];
         }
 
         foreach($commands as $command)
@@ -419,6 +435,15 @@ class MigrationSnapshot
                         }
                     }
                     break;
+
+                case 'rename':
+                    if(isset($command->to)) {
+                        $table_state['name']['current'] = $command->to;
+                        $table_state['name']['renamed'] = true;
+                        $table_state['name']['migrated'] = static::$migrated;
+                        $table_state['name']['previous'] = $tableName;
+                        $command->from = $tableName;
+                    }
             }
 
             if(static::$migrated == false)

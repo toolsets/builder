@@ -15,7 +15,13 @@
                 </div>
             </div>
 
-            <input-columns :selected="selectedItem" :tables="getTablesList"></input-columns>
+            <update-form v-if="selectedItem !== null" :selected="selectedItem" :tables="getTablesList"></update-form>
+
+            <div class="action-footer">
+                <button class="btn btn-primary" @click='submitForm' v-bind:disabled='submittable === false'>Submit</button>
+                <button class="btn btn-default" @click='cancelForm'>Cancel</button>
+                <button class="btn btn-danger" @click='dropTable'>Drop Table</button>
+            </div>
 
         </div>
     </div>
@@ -50,35 +56,62 @@ function getComputedValue(fromKey, toKey, data) {
 export default {
 
      components: {
-        'input-columns': UpdateFormComponent
+        'update-form': UpdateFormComponent
      },
 
      data() {
 
         return {
+            selectedItemOriginal : null,
+            selectedItem: null
 
         }
     },
 
     computed : {
 
-        ...mapState('database', ['selectedItem']),
-
         ...mapGetters('database',['getTablesList']),
+
 
         tableName : {
 
             set : function(newValue) {
-                setComputedValue(newValue, 'table_name', 'tableName', this.selectedItem);
+                if(this.selectedItem !== null) {
+                    setComputedValue(newValue, 'table_name', 'tableName', this.selectedItem);
+                }
+
             },
 
             get: function() {
-                return getComputedValue('table_name', 'tableName', this.selectedItem);
+                if(this.selectedItem) {
+                    return getComputedValue('table_name', 'tableName', this.selectedItem);
+                }
             }
 
         },
 
 
+    },
+    
+    methods: {
+        submitForm: function () {
+            
+        },
+
+        cancelForm: function () {
+            this.$router.push({ name: 'db-table-view', params: { key: this.selectedItemOriginal.table_name} });
+        },
+        
+        dropTable: function () {
+            
+        },
+
+        ...mapGetters('database', ['getSelectedItem']),
+    },
+
+    mounted() {
+         this.selectedItem = _.cloneDeep(this.getSelectedItem());
+         this.selectedItemOriginal = _.cloneDeep(this.getSelectedItem);
     }
 }
 </script>
@@ -86,11 +119,16 @@ export default {
 .toolbar {
     padding: 8px;
     background-color: #ebeaee;
+    margin-bottom: 8px;
 
-.btn {
-    font-size: .8em;
+    .btn {
+        font-size: .8em;
+    }
+
 }
 
+.action-footer {
+    margin:8px;
 }
 
 .table {
@@ -98,26 +136,35 @@ export default {
     background-color: #FFF;
     margin-bottom: 0px;
 
-.tbl-status {
-    width: 10px;
-    padding: 0;
-}
+    .tbl-status {
+        width: 10px;
+        padding: 0;
+    }
 
-td.migrated {
-    background-color: #3f964e;
-}
+    td.migrated {
+        background-color: #3f964e;
+    }
 
-td.not-migrated {
-    background-color: #c9a900;
-}
+    td.not-migrated {
+        background-color: #c9a900;
+    }
 
-.col-type {
-    width:200px;
-}
+    tr.drop-column {
 
-.col-name {
-    width:230px;
-}
+        td.migrated {
+            background-color: #cc1214;
+        }
+
+        td.not-migrated {
+            background-color: #cc1214;
+        }
+
+        td {
+            color: #cc1214;
+            text-decoration: line-through;
+        }
+
+    }
 }
 
 </style>

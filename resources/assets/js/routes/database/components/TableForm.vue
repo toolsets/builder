@@ -73,7 +73,7 @@
                     <tr v-for="fk in selectedItem.relations" v-bind:class="{ 'drop-column': fk.drop }">
                         <td v-bind:class="{ migrated: fk.migrated == true, 'not-migrated': fk.migrated == false}" class="tbl-status"></td>
                         <td>{{ fk.index }}</td>
-                        <td>{{ fk.columns }}</td>
+                        <td>{{ fk.column }}</td>
                         <td>{{ fk.fk_table }}</td>
                         <td>{{ fk.fk_column }}</td>
                         <td>{{ fk.on_update ? fk.on_update : '' }}</td>
@@ -93,6 +93,7 @@
                     <tr>
                         <th class="tbl-status"></th>
                         <th>Name</th>
+                        <th>Type</th>
                         <th>Columns</th>
                     </tr>
                     </thead>
@@ -100,6 +101,7 @@
                     <tr v-for="indx in selectedItem.indexes" v-bind:class="{ 'drop-column': indx.drop }">
                         <td v-bind:class="{ migrated: indx.migrated == true, 'not-migrated': indx.migrated == false}" class="tbl-status"></td>
                         <td>{{ indx.index }}</td>
+                        <td>{{ indx.type }}</td>
                         <td>{{ indx.columns }}</td>
                     </tr>
                     </tbody>
