@@ -10,7 +10,7 @@
                 <div class="builder-form">
                     <div class="form-group input-title">
                         <label for="tableName">Table Name</label>
-                        <input type="text" class="form-control" v-model="tableName" />
+                        <input v-if='selectedItem' type="text" class="form-control" v-model="selectedItem.table_name" />
                     </div>
                 </div>
             </div>
@@ -32,6 +32,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import types from '../store/types';
 import UpdateFormComponent from './UpdateFormComponent.vue'
+import selectedTable from './selectedTable'
 
 
 function setComputedValue(newValue, fromKey, toKey, data) {
@@ -73,21 +74,10 @@ export default {
         ...mapGetters('database',['getTablesList']),
 
 
-        tableName : {
-
-            set : function(newValue) {
-                if(this.selectedItem !== null) {
-                    setComputedValue(newValue, 'table_name', 'tableName', this.selectedItem);
-                }
-
-            },
-
-            get: function() {
-                if(this.selectedItem) {
-                    return getComputedValue('table_name', 'tableName', this.selectedItem);
-                }
+        tableName : function() {
+            if(this.selectedItem) {
+                return getComputedValue('table_name', 'tableName', this.selectedItem);
             }
-
         },
 
 
