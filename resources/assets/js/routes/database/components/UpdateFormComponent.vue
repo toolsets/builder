@@ -294,65 +294,7 @@ const Changeable = [
     "unsignedSmallInteger"
 ];
 
-function makeUpdatableTableObject(selectedItem) {
 
-    var table = {};
-    var PrimaryKeyColumn = null;
-    var columnRefs = {};
-
-    if(selectedItem) {
-        table.name = selectedItem.table_name;
-        table.columns = Object.keys(selectedItem.columns).map(function(key) {
-
-            var item = selectedItem.columns[key];
-            var isDropped = false;
-            if(item.drop !== undefined && item.drop === true) {
-                isDropped = true;
-            }
-
-            var columnObj = {
-                key: key,
-                name: item.attributes.name,
-                type: item.attributes.type,
-                length: item.attributes.length,
-                nullable: item.attributes.nullable,
-                default: item.attributes.default,
-                migrated: item.migrated,
-                drop: isDropped,
-                onFile: item.onFile,
-                updates: {
-                    change_name: null,
-                    change_type: null,
-                    change_length: null,
-                    change_nullable: null,
-                    change_default: null,
-                    change_drop: null
-                }
-            };
-
-            if(columnObj.primaryKey) {
-                PrimaryKeyColumn = key;
-            }
-
-            columnRefs[key] = columnObj;
-
-            return columnObj;
-        });
-
-        table.relations = selectedItem.relations;
-        table.relations_added = [];
-
-        table.updates = selectedItem.updates;
-        table.hasEnumColumns = selectedItem.hasEnumColumns;
-        table.updates = selectedItem.updates;
-
-        table.indexes = selectedItem.indexes;
-        table.indexes_added = [];
-        table.columnRefs = columnRefs;
-    }
-
-    return table;
-}
 
 
 function makeNewColumn(tempKey) {
@@ -473,7 +415,7 @@ export default{
             changeableTypes : Changeable,
             hasEnumType: this.selected.hasEnumColumns,
             EnumWarningMsg: EnumTypeWarning,
-            selectedTable: makeUpdatableTableObject(this.selected)
+            selectedTable: this.selected
         }
     },
 

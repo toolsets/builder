@@ -10,7 +10,7 @@
                 <div class="builder-form">
                     <div class="form-group input-title">
                         <label for="tableName">Table Name</label>
-                        <input v-if='selectedItem' type="text" class="form-control" v-model="selectedItem.table_name" />
+                        <input v-if='selectedItem' type="text" class="form-control" v-model="selectedItem.name" />
                     </div>
                 </div>
             </div>
@@ -32,8 +32,66 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import types from '../store/types';
 import UpdateFormComponent from './UpdateFormComponent.vue'
-import selectedTable from './selectedTable'
 
+function makeUpdatableTableObject(selectedItem) {
+
+    var table = {};
+    var PrimaryKeyColumn = null;
+    var columnRefs = {};
+
+    if(selectedItem) {
+        table.name = selectedItem.table_name;
+        table.columns = Object.keys(selectedItem.columns).map(function(key) {
+
+            var item = selectedItem.columns[key];
+            var isDropped = false;
+            if(item.drop !== undefined && item.drop === true) {
+                isDropped = true;
+            }
+
+            var columnObj = {
+                key: key,
+                name: item.attributes.name,
+                type: item.attributes.type,
+                length: item.attributes.length,
+                nullable: item.attributes.nullable,
+                default: item.attributes.default,
+                migrated: item.migrated,
+                drop: isDropped,
+                onFile: item.onFile,
+                updates: {
+                    change_name: null,
+                    change_type: null,
+                    change_length: null,
+                    change_nullable: null,
+                    change_default: null,
+                    change_drop: null
+                }
+            };
+
+            if(columnObj.primaryKey) {
+                PrimaryKeyColumn = key;
+            }
+
+            columnRefs[key] = columnObj;
+
+            return columnObj;
+        });
+
+        table.relations = selectedItem.relations;
+        table.relations_added = [];
+
+        table.updates = selectedItem.updates;
+        table.hasEnumColumns = selectedItem.hasEnumColumns;
+        table.updates = selectedItem.updates;
+
+        table.indexes = selectedItem.indexes;
+        table.indexes_added = [];
+        table.columnRefs = columnRefs;
+    }
+
+    return table;
+}
 
 function setComputedValue(newValue, fromKey, toKey, data) {
     if(newValue !== data[fromKey]) {
@@ -115,7 +173,7 @@ export default {
     },
 
     mounted() {
-         this.selectedItem = Object.assign({}, this.getSelectedItem());
+         this.selectedItem = makeUpdatableTableObject(Object.assign({}, this.getSelectedItem()));
          this.selectedItemOriginal = _.cloneDeep(this.getSelectedItem());
     }
 }
