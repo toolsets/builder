@@ -10,6 +10,7 @@ namespace Toolsets\Builder\Repositories;
 
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Toolsets\Builder\Parsers\Yaml;
@@ -221,6 +222,14 @@ class DatabaseTables
         }
 
         return $definitions;
+    }
+
+
+
+    public function updateTable($data) {
+
+        //
+        Log::info('update_table', $data);
     }
 
 

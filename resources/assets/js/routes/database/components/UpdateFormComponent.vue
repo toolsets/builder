@@ -479,6 +479,10 @@ export default{
 
     methods: {
 
+        fireUpdate() {
+            this.$emit('update', this.selectedTable);
+        },
+
         updateColumn(colKey, property, value) {
 
             var column = this.selectedTable.columnRefs[colKey];
@@ -529,6 +533,8 @@ export default{
 
                 }
             }
+
+            this.fireUpdate();
         },
 
         dropRelation(relation) {
@@ -548,6 +554,7 @@ export default{
                 }
             }
 
+            this.fireUpdate();
         },
 
         dropRelationByColumn(column) {
@@ -563,13 +570,17 @@ export default{
                     this.dropNewRelation(relation);
                 }
             }.bind(this));
+
+            this.fireUpdate();
         },
 
         dropNewRelation(relation) {
             var selectedTable = this.selectedTable;
             var indx = selectedTable.relations_added.indexOf(relation);
             selectedTable.relations_added.splice(indx, 1);
-            this.$set(this.selectedTable, selectedTable);
+            //this.$set(this.selectedTable, selectedTable);
+
+            this.fireUpdate();
         },
 
         addRelation() {
@@ -582,7 +593,9 @@ export default{
             };
             var selectedTable = this.selectedTable;
             selectedTable.relations_added.push(newRelation);
-            this.$set(this.selectedTable, selectedTable);
+            //this.$set(this.selectedTable, selectedTable);
+
+            this.fireUpdate();
         },
 
         addColumn() {
@@ -591,6 +604,8 @@ export default{
 
             this.selectedTable.columns.push(column);
             this.selectedTable.columnRefs[tempKey] = column;
+
+            this.fireUpdate();
         },
 
         dropIndex(indexItem) {
@@ -608,13 +623,17 @@ export default{
                     change_drop: null
                 }
             }
+
+            this.fireUpdate();
         },
 
         dropNewIndex(indexItem) {
             var selectedTable = this.selectedTable;
             var indx = selectedTable.indexes_added.indexOf(indexItem);
             selectedTable.indexes_added.splice(indx, 1);
-            this.$set(this.selectedTable, selectedTable);
+            //this.$set(this.selectedTable, selectedTable);
+
+            this.fireUpdate();
         },
 
         addIndex() {
@@ -625,7 +644,9 @@ export default{
 
             var selectedTable = this.selectedTable;
             selectedTable.indexes_added.push(newIndex);
-            this.$set(this.selectedTable, selectedTable);
+            //this.$set(this.selectedTable, selectedTable);
+
+            this.fireUpdate();
         },
 
         addTimestamps() {
@@ -644,6 +665,8 @@ export default{
                 }
             }.bind(this));
 
+            this.fireUpdate();
+
         },
 
         addTimestampsTz() {
@@ -660,6 +683,8 @@ export default{
 
                 }
             }.bind(this));
+
+            this.fireUpdate();
         }
     }
 }

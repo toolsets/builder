@@ -7,5 +7,9 @@ export default {
     submitNewTable(table) {
 
         return Vue.http.post('/builder/ajax/tables', table);
+    },
+
+    submitUpdateTable(table) {
+        return Vue.http.put('/builder/ajax/tables', table);
     }
 }

@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <update-form v-if="selectedItem !== null" :selected="selectedItem" :tables="getTablesList"></update-form>
+            <update-form v-if="selectedItem !== null" :selected="selectedItem" :tables="getTablesList" v-on:update="updateSelected"></update-form>
 
             <div class="action-footer">
                 <button class="btn btn-primary" @click='submitForm' v-bind:disabled='submittable === false'>Submit</button>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import types from '../store/types';
 import UpdateFormComponent from './UpdateFormComponent.vue'
 
@@ -95,8 +95,19 @@ export default {
     
     methods: {
         submitForm: function () {
-            
+
+            this.storeSubmitUpdate({
+                table: this.selectedItem
+            }).then(function(response) {
+                if(response.ok) {
+                    this.$router.push({ name: 'db-table-view', params: { key: this.selectedItemOriginal.table_name} });
+                }
+            }.bind(this));
         },
+
+        ...mapActions('database', {
+            storeSubmitUpdate : 'UPDATE_TABLE'
+        }),
 
         cancelForm: function () {
             this.$router.push({ name: 'db-table-view', params: { key: this.selectedItemOriginal.table_name} });
@@ -106,12 +117,16 @@ export default {
             
         },
 
+        updateSelected: function (data) {
+          this.selectedItem = data;
+        },
+
         ...mapGetters('database', ['getSelectedItem']),
     },
 
     mounted() {
-         this.selectedItem = _.cloneDeep(this.getSelectedItem());
-         this.selectedItemOriginal = _.cloneDeep(this.getSelectedItem);
+         this.selectedItem = Object.assign({}, this.getSelectedItem());
+         this.selectedItemOriginal = _.cloneDeep(this.getSelectedItem());
     }
 }
 </script>

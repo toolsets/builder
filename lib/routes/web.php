@@ -21,4 +21,10 @@ Route::group(['prefix' => 'ajax'], function ()
 
         return $repo->createNewTable($request->all());
     });
+
+    Route::put('tables', function (\Illuminate\Http\Request $request, DatabaseTables $repo) {
+
+        return $repo->updateTable($request->all());
+    });
+
 });

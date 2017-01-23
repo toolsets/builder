@@ -116,6 +116,9 @@ export default {
                         });
                     }
 
+                    table.relations_added = [];
+                    table.indexes_added = [];
+
                     table.hasEnumColumns = HasEnumKey;
                     table.primaryKeyColumn = PrimaryKeyColumn;
 
@@ -170,10 +173,16 @@ export default {
             return api.submitNewTable(payload.table).then(function(response) {
 
                 dispatch(types.GET_TABLES);
-
                 return response;
             });
 
+        },
+
+        [types.UPDATE_TABLE] ({dispatch}, payload) {
+            return api.submitUpdateTable(payload.table).then(function (response) {
+                dispatch(types.GET_TABLES);
+                return response;
+            })
         }
     }
 
